@@ -1,2 +1,1 @@
-# WS-Chat-app
-Socket.io chat application in Typescript(MENN stack)
+<h1> A simple socket.io implementation in MENN stack </h1>
