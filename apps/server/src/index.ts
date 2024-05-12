@@ -1,1 +1,1 @@
-console.log('Hello world')
+console.log('Hello world, I\'m a new character')
