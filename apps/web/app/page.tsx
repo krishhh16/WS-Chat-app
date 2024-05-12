@@ -8,15 +8,12 @@ export default function page() {
   useEffect(() => {
     const socket = io('http://localhost:3001')
     setSocket(socket)
-
-    
-
   }, [])
   return (
-    <React.StrictMode>
-    <div>
-      Hello world
+    <div style={{width: "80vw", margin: "auto", }}>
+      <div style={{height: "20vh", margin: "15px 20px", textAlign: "center"}}>
+        <h2>You Sacred place to chat with Others!!</h2>
+      </div>
     </div>
-    </React.StrictMode>
   )
 }
