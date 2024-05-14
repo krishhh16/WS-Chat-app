@@ -10,9 +10,10 @@ export default function page() {
     setSocket(socket)
   }, [])
   return (
-    <div style={{width: "80vw", margin: "auto", }}>
-      <div style={{height: "20vh", margin: "15px 20px", textAlign: "center"}}>
-        <h2>You Sacred place to chat with Others!!</h2>
+    <div style={{width: "80vw", margin: "auto"}}>
+      <div className= "" style={{height: "20vh", margin: "15px 20px", textAlign: "center"}}>
+        <h2>Your Sacred place to chat with Others!!</h2>
+        <p>Not just another Social site</p>
       </div>
     </div>
   )
