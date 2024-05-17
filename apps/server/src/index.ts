@@ -112,8 +112,6 @@ app.get("/user", (req, res) => {
 }
 })
 
-
-
 io.on("connection", (socket) => {
   console.log(`User connected with id ${socket.id} `);
 
