@@ -19,7 +19,7 @@ const io = new Server(server, {
   }
 });
 
-
+app.use(express.json())
 app.use(cookieParser())
 app.use(
   cors({
@@ -34,11 +34,12 @@ app.get("/", (req, res) =>{
 })
 
 app.post('/signup', async (req, res) => {
-  const {username, email, password} = await req.body;
+  const {username, email, password} =  req.body;
   if(!username || !email || !password){
     return res.status(404).json({success: false})
   }
 
+  try{
   const userExists = await prisma.user.findFirst({
     where: {email}
   })
@@ -46,12 +47,11 @@ app.post('/signup', async (req, res) => {
   if (userExists){
     return res.json({success: false, msg: "user already exists"})
   }
-  try{
     await prisma.user.create({
       data: {
         username,
         email,
-         password
+        password
       }
     })
 
@@ -79,7 +79,7 @@ app.post('/signin', async (req, res) => {
   try{
     const token = jwt.sign({email} , jwtSec);
     res.cookie("token", token)
-    
+
     return res.json({success: true})
   }catch(err){
     console.log(err);
