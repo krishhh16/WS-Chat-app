@@ -12,13 +12,9 @@ function page() {
     async function handleSubmit(e: any) {
         e.preventDefault();
         try{
-          if (formData.password !== formData.password) {
-            alert("Password doesn't match");
-            return;
-          }
-        const response = await axios.post('http://localhost:3001/signup', formData)
+        const response = await axios.post('http://localhost:3001/signin', formData)
         if(!response.data.success) {
-            alert("The user already exists")
+            alert("Invalid user credentials")
             return
         }else {
             alert("user signed up successfully!")
@@ -37,20 +33,12 @@ function page() {
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Sign Up Page</h1>
       <form onSubmit={handleSubmit} >
         <div>
-        <label className={inputLabel}>Username</label>
-        <input className={inputClassName} value={formData.username} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, username: e.target.value})}} />
-        </div>
-        <div>
         <label className={inputLabel}>Email</label>
         <input className={inputClassName} type="email" value={formData.email} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, email: e.target.value})}} />
         </div>
         <div>
         <label className={inputLabel}>Password</label>
         <input className={inputClassName} type="password"  value={formData.password} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, password: e.target.value})}} />
-        </div>
-        <div>
-        <label className={inputLabel}>Confirm Password</label>
-        <input type="password" className={inputClassName} value={formData.confirmPassword} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, confirmPassword: e.target.value})}} />
         </div>
         <div className="flex mt-4 justify-center">
         <button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out"  type="submit">Submit</button>
