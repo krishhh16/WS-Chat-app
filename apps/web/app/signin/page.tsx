@@ -4,10 +4,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 function page() {
     const [formData, setForm] = useState({
-        username: "",
         email: "",
         password:"",
-        confirmPassword: ""
     })
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -18,11 +16,9 @@ function page() {
             return
         }else {
             alert("user signed up successfully!")
-            window.location.href = 'http://localhost:3000/signin'
-            
         }
     }catch (err){   
-
+        alert("Something went wrong, please try again later");
     }
     }
 
