@@ -3,7 +3,7 @@ import {Server} from "socket.io";
 import {createServer} from "http";
 import cors from "cors"
 import { PrismaClient } from "@prisma/client";
-import jwt from 'jsonwebtoken'
+import jwt, {VerifyErrors} from 'jsonwebtoken'
 import cookieParser from "cookie-parser"
 
 const jwtSec = 'This is a very big secret of my server'
@@ -86,6 +86,30 @@ app.post('/signin', async (req, res) => {
     return res.json({success: false})
   }
 
+})
+
+app.get("/user", (req, res) => {
+  const token = req.cookies.token;
+  try {
+  const decoded = jwt.verify(token, jwtSec, async (err: VerifyErrors | null, data: any) => {
+  if (err) {
+    return res.json({success: false})
+  }
+  
+  const user = await prisma.user.findFirst({
+    where: {email: data.email}
+  })
+
+  if (!user) {
+    return res.json({success: false})
+  }
+  res.json({success: true, userName: user.username, userId: user.userID})
+  })
+ 
+} catch (err) {
+  console.log(err);
+  return res.json({success: false});
+}
 })
 
 
