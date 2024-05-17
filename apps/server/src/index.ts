@@ -27,13 +27,12 @@ io.on("connection", (socket) => {
 
   socket.on("message", ({room, msg}) =>{
     console.log({room, msg})
-    io.to(room).emit('receive message', msg)
+    socket.broadcast.emit('received', {msg})
+    console.log('emitted the message')
   })
 
-  socket.emit('welcome', "Welcome to the server!!")
-  socket.broadcast.emit('welcome', `${socket.id} has joined the room`)
 })
 
 server.listen(port, () => {
-  console.log(`port running on ${port}`)
+  console.log(`server running on ${port}`)
 })

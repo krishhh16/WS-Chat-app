@@ -10,6 +10,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/socket.io-client": "^3.0.0",
     "prettier": "^3.2.5",
     "turbo": "latest"
   },
