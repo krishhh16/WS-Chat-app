@@ -10,7 +10,7 @@ function page() {
     async function handleSubmit(e: any) {
         e.preventDefault();
         try{
-        const response = await axios.post('http://localhost:3001/signin', formData)
+        const response = await axios.post('http://localhost:3001/signin', formData, {withCredentials: true}) 
         if(!response.data.success) {
             alert("Invalid user credentials")
             return
