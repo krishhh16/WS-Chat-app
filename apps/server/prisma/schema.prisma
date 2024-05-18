@@ -9,37 +9,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // or your preferred database provider
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id                 Int          @id @default(autoincrement())
-  username           String       @unique
-  email              String       @unique
-  password           String
-  friends            Friendship[] @relation("UserFriends")
-  friendOf           Friendship[] @relation("FriendUsers")
-  messagesSent       Message[]    @relation("MessagesSent")
-  messagesReceived   Message[]    @relation("MessagesReceived")
-}
-
-model Friendship {
-  id        Int  @id @default(autoincrement())
-  user      User @relation("UserFriends", fields: [userId], references: [id])
-  userId    Int
-  friend    User @relation("FriendUsers", fields: [friendId], references: [id])
-  friendId  Int
-
-  @@unique([userId, friendId])
-}
-
-model Message {
-  id         Int      @id @default(autoincrement())
-  content    String
-  timestamp  DateTime @default(now())
-  sender     User     @relation("MessagesSent", fields: [senderId], references: [id])
-  senderId   Int
-  receiver   User     @relation("MessagesReceived", fields: [receiverId], references: [id])
-  receiverId Int
+  userID String @id @default(uuid())
+  username String
+  email String
+  password String
 }
