@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Request, Response, NextFunction} from "express";
 import {Server} from "socket.io";
 import {createServer} from "http";
 import cors from "cors"
@@ -6,6 +6,11 @@ import { PrismaClient } from "@prisma/client";
 import jwt, {JwtPayload} from 'jsonwebtoken'
 import cookieParser from "cookie-parser"
 
+declare module 'express-serve-static-core' {
+  interface Request {
+    userDetails?: { userID: string; username: string; email: string; password: string; };
+  }
+}
 const jwtSec = 'This is a very big secret of my server'
 const port = 3001;
 const prisma = new PrismaClient();
@@ -29,7 +34,7 @@ app.use(
   })
 )
 
-async function validateUser(req: any, res: any,next: any ){
+async function validateUser(req: Request, res: Response,next: NextFunction ){
   const token = req.cookies.token;
   console.log(`this is the token that I've provided ${token}`)
   try {
@@ -42,7 +47,7 @@ async function validateUser(req: any, res: any,next: any ){
     console.log("user doesn't exist")
     return res.json({success: false, msg: 'user doesn\'t exist'})
   } else {
-    req.userDetails;
+    req.userDetails = user ;
     next()
   }} catch (err) {
     console.log(err);
@@ -109,15 +114,40 @@ app.post('/signin', async (req, res) => {
 
 })
 
-app.get("/user", async (req, res) => {
- 
+app.get("/user", validateUser, async (req, res) => {
+ res.json({success: true, username: req.userDetails?.username, userID: req.userDetails?.userID})
 
 })
 
-app.get("get-user", async (req, res) => {
+app.get("/get-user",validateUser, async (req, res) => {
   const {query} = req.body;
 
+  if (!query) {
+    return res.json({success: false, msg: "query not provided"})
+  }
   
+  try {
+    const user = await prisma.user.findMany({
+      where : {
+        OR: [
+          {
+            username: {
+              contains: query,
+              mode: "insensitive"
+            }
+          }
+        ]
+      }
+    })
+    const users = user.map((item) => {
+      return {username: item.username, userID: item.userID}
+    })
+    res.json(users)
+  
+} catch (err) {
+  console.error(err);
+  return res.send("Internal server error0")
+}
 })
 
 io.on("connection", (socket) => {
