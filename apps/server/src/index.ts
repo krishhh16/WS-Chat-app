@@ -3,7 +3,7 @@ import {Server} from "socket.io";
 import {createServer} from "http";
 import cors from "cors"
 import { PrismaClient } from "@prisma/client";
-import jwt, {VerifyErrors} from 'jsonwebtoken'
+import jwt, {JwtPayload} from 'jsonwebtoken'
 import cookieParser from "cookie-parser"
 
 const jwtSec = 'This is a very big secret of my server'
@@ -88,27 +88,25 @@ app.post('/signin', async (req, res) => {
 
 })
 
-app.get("/user", (req, res) => {
+app.get("/user", async (req, res) => {
   const token = req.cookies.token;
+  console.log(`this is the token that I've provided ${token}`)
   try {
-  const decoded = jwt.verify(token, jwtSec, async (err: VerifyErrors | null, data: any) => {
-  if (err) {
-    return res.json({success: false})
-  }
-  
+  const decoded = jwt.verify(token, jwtSec) as JwtPayload;
   const user = await prisma.user.findFirst({
-    where: {email: data.email}
+    where: {email: decoded.email}
   })
-
-  if (!user) {
-    return res.json({success: false})
+  
+  if (!user){
+    console.log("user doesn't exist")
+    return res.json({success: false, msg: 'user doesn\'t exist'})
+  } else {
+    console.log('user exists');
+    return res.json({success: true, username: user.username, userID: user.userID})
   }
-  res.json({success: true, userName: user.username, userId: user.userID})
-  })
- 
 } catch (err) {
   console.log(err);
-  return res.json({success: false});
+  return res.json({success: false, err});
 }
 })
 

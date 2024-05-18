@@ -34,7 +34,7 @@ const GoingChat = () => {
   }, [])
 
   async function socketConnect() {
-    const userData = await axios.get('http://localhost:3001/user')
+    const userData = await axios.get('http://localhost:3001/user', {withCredentials: true})
 
     if (!userData.data.success){
       alert("Please login before chating with your friends")
