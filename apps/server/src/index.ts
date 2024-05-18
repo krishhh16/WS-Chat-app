@@ -29,6 +29,27 @@ app.use(
   })
 )
 
+async function validateUser(req: any, res: any,next: any ){
+  const token = req.cookies.token;
+  console.log(`this is the token that I've provided ${token}`)
+  try {
+  const decoded = jwt.verify(token, jwtSec) as JwtPayload;
+  const user = await prisma.user.findFirst({
+    where: {email: decoded.email}
+  })
+  
+  if (!user){
+    console.log("user doesn't exist")
+    return res.json({success: false, msg: 'user doesn\'t exist'})
+  } else {
+    req.userDetails;
+    next()
+  }} catch (err) {
+    console.log(err);
+    return res.json({success: false, err});
+  }
+}
+
 app.get("/", (req, res) =>{
   res.json({msg: "Hello world"})
 })
@@ -89,25 +110,14 @@ app.post('/signin', async (req, res) => {
 })
 
 app.get("/user", async (req, res) => {
-  const token = req.cookies.token;
-  console.log(`this is the token that I've provided ${token}`)
-  try {
-  const decoded = jwt.verify(token, jwtSec) as JwtPayload;
-  const user = await prisma.user.findFirst({
-    where: {email: decoded.email}
-  })
+ 
+
+})
+
+app.get("get-user", async (req, res) => {
+  const {query} = req.body;
+
   
-  if (!user){
-    console.log("user doesn't exist")
-    return res.json({success: false, msg: 'user doesn\'t exist'})
-  } else {
-    console.log('user exists');
-    return res.json({success: true, username: user.username, userID: user.userID})
-  }
-} catch (err) {
-  console.log(err);
-  return res.json({success: false, err});
-}
 })
 
 io.on("connection", (socket) => {
