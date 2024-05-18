@@ -120,7 +120,7 @@ app.get("/user", validateUser, async (req, res) => {
 })
 
 app.get("/get-user",validateUser, async (req, res) => {
-  const {query} = req.body;
+  const {query} = req.query;
 
   if (!query) {
     return res.json({success: false, msg: "query not provided"})
@@ -132,7 +132,7 @@ app.get("/get-user",validateUser, async (req, res) => {
         OR: [
           {
             username: {
-              contains: query,
+              contains: String(query),
               mode: "insensitive"
             }
           }
@@ -142,7 +142,7 @@ app.get("/get-user",validateUser, async (req, res) => {
     const users = user.map((item) => {
       return {username: item.username, userID: item.userID}
     })
-    res.json(users)
+    res.json({users, success: true})
   
 } catch (err) {
   console.error(err);

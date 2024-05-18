@@ -6,7 +6,7 @@ import AddFriend from './AddFriend';
 
 
 const Sidebar = () => {
-  const [showDiwaliModal, setShowDiwaliModal] = useState(false);
+  const [addFriendModal, setAddFriendModal] = useState(false);
     const arr = []
     .map((c, i) => (
         <div
@@ -37,13 +37,13 @@ const Sidebar = () => {
             <div>
                   
                 <button
-                    onClick={() => setShowDiwaliModal(true)}
+                    onClick={() => setAddFriendModal(true)}
                     className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
         >
           Add Friend
         </button>
-        {showDiwaliModal && (
-          <AddFriend onClose={() => setShowDiwaliModal(false)} />
+        {addFriendModal && (
+          <AddFriend onClose={() => setAddFriendModal(false)} />
         )}
                 </div>
             )
