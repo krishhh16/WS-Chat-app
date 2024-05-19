@@ -5,12 +5,9 @@ const AddFriend = ({ onClose }) => {
     const [isClicked, setIsClicked] = useState(false);
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
-    const [users, setUsers] = useState()
+    const [users, setUsers] = useState([])
 
-    useEffect(() => {
-      
-    }, [])
-    
+
     async function handleQuery(e : any) {
       setLoading(true)
       setUserName(e.target.value);
@@ -46,7 +43,23 @@ const AddFriend = ({ onClose }) => {
      {result && (
         <>
         <p className="text-gray-700 font-semibold">{result}</p>
-        <p className="text-gray-500">.</p>
+        <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
+        { 
+        users?.map((item, i) => {
+          return (
+            <div
+      className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
+      onClick={() =>{ 
+        setIsClicked(!isClicked)
+      }
+      
+    }
+    >
+      <p className="text-black font-semibold">{item.username}</p>
+    </div>
+          )
+        })
+        }
         </>
         )}
       </div>
