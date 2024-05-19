@@ -16,6 +16,7 @@ function page() {
             return
         }else {
             alert("user signed up successfully!")
+            window.location.href = 'http://localhost:3000/chat'
         }
     }catch (err){   
         alert("Something went wrong, please try again later");

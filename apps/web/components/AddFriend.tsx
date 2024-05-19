@@ -1,12 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const AddFriend = ({ onClose }) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
-    const [users, setUsers] = useState<Array>()
+    const [users, setUsers] = useState()
 
+    useEffect(() => {
+      
+    }, [])
     
     async function handleQuery(e : any) {
       setLoading(true)
@@ -23,8 +26,9 @@ const AddFriend = ({ onClose }) => {
       } else {
         setResultText("Users:")
         setUsers(users.data.users)
-        setLoading(false)
       }
+      setLoading(false)
+      return
     }
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
