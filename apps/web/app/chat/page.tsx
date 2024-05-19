@@ -7,12 +7,16 @@ import axios from 'axios';
 
 const GoingChat = () => {
   const [isUser, setIsUser] = useState(false)
+  const [activeUser, setActiveUser] = useState({
+    username: "",
+    userId: ""
+  })
   useEffect(() => {
 
   }, [])
 
   async function userDetails() {
-    const user = await axios.get('http://localhost:3001/user', {withCredentials: true})
+    const user = await axios.get('http://localhost:3001/user', {withCredentials: true});
 
     if (!user.data.success){
       alert("Please login before starting a new Chat")
@@ -20,7 +24,6 @@ const GoingChat = () => {
     }else {
       setIsUser(true)
     }
-
   }
 
   return (
@@ -29,7 +32,7 @@ const GoingChat = () => {
         !isUser ?
         <>
         <Sidebar/>
-        <ChatComponent/> 
+        <ChatComponent username={activeUser.username}  userId={activeUser.userId} /> 
         </>
         :
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">

@@ -1,16 +1,15 @@
 import React, {useState} from 'react'
 import {io, Socket} from 'socket.io-client'
-import axios from "axios"
+
 interface MsgType {
   username: string;
   message: string;
   selfEnd: boolean
 }
 
-function ChatComponent({}) {
+function ChatComponent({username, userId}: {username: string, userId: string}) {
     const [msgs, setMsgs] = useState<MsgType[]>([]);
     const [text, setText] = useState<string>("");
-    const [isUser, setIsUser] = useState<boolean>(false)
     const [socket, setSocket] = useState<Socket|null>(null);
     const arr = msgs
     .map((item) => {
@@ -21,15 +20,13 @@ function ChatComponent({}) {
     const handleSubmit = () => {
         setMsgs([...msgs, {username: "Me", message: text , selfEnd: true}]); 
         setText('')
-    
         socket?.emit('message', {msg: text, room: "none"})
-         
       }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
     <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
       <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
-        Chat with your friends!!!
+        {username ? "Start a new chat" :  "Chat with your friends!!!"}
       </div>
       <div className="flex-grow p-5 overflow-y-auto bg-gray-50" id="chat-box">
         {arr}
@@ -57,9 +54,6 @@ function ChatComponent({}) {
       </form>
     </div>
   </div>
-  
-  
-  
   )
 }
 const Message = ({ username, text, selfEnd }: {username: string, text: string, selfEnd: boolean}) => {

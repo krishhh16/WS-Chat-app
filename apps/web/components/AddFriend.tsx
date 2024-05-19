@@ -18,7 +18,7 @@ const AddFriend = ({ onClose }) => {
 
       if (!users.data.success){
         setResultText('Internal Server error')
-      } else if (users.data.user?.length){
+      } else if (users.data.users?.length === 0){
         setResultText('Hmmmm.... No such user')
       } else {
         setResultText("Users:")
@@ -51,6 +51,7 @@ const AddFriend = ({ onClose }) => {
       className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
       onClick={() =>{ 
         setIsClicked(!isClicked)
+        onClose();
       }
       
     }
