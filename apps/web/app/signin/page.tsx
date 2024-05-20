@@ -27,7 +27,7 @@ function page() {
     const inputClassName = "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none focus:border-indigo-500"
   return (
     <div className="max-w-md mx-auto bg-white shadow-2xl rounded-lg p-6" >
-        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Sign Up Page</h1>
+        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Sign in Page</h1>
       <form onSubmit={handleSubmit} >
         <div>
         <label className={inputLabel}>Email</label>

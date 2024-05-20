@@ -155,7 +155,7 @@ interface userObject {
   socketId: string;
 }
 
-class users{
+class Users{
   user: userObject[]
   constructor() {
     this.user = []
@@ -172,17 +172,28 @@ class users{
   }
 
   findUser(userId: string){
-    return this.user.find(item => item.userId === userId)
+    return this.user.find(item => item.userId === userId)?.socketId
   }
 }
+const users = new Users();
+
 
 io.on("connection", (socket) => {
   console.log(`User connected with id ${socket.id} `);
+  
+  socket.on('initial_value', (userId: string) => {
+    users.addUser(userId, socket.id);
+    console.log(`Server Received message ${userId} with the socket id ${socket.id}`)
+  })
 
-  socket.on("message", ({room, msg}) =>{
-    console.log({room, msg})
-    io.emit('received', {msg})
-    console.log('emitted the message')
+  socket.on("message", ({userId, msg}: {userId: string, msg: string}) =>{
+    const user = users.findUser(userId)
+    if (user) {
+      io.to(user).emit('private_message', msg)
+      console.log(`sent message to ${userId} the message ${msg}`)
+    } else {
+      console.log(`User ${userId} not found`)
+    }
   })
 
 })

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, {useState, useEffect} from 'react'
 import {io, Socket} from 'socket.io-client'
 
@@ -6,14 +7,46 @@ interface MsgType {
   message: string;
   selfEnd: boolean
 }
+interface SelfData{
+  username: string;
+  userId: string;
+}
 
 function ChatComponent({username, userId}: {username: string, userId: string}) {
     const [msgs, setMsgs] = useState<MsgType[]>([]);
     const [text, setText] = useState<string>("");
     const [socket, setSocket] = useState<Socket|null>(null);
+    const [selfData, setSelf] = useState({
+      myUsername: "",
+      myUserId: ""
+    })
+   
 
-    
+    async function socketSetup() {
+        const userData = await axios.get('http://localhost:3001/user', {withCredentials: true});
 
+        if (!userData.data.success) {
+          alert ('Pleease Login before sending messages');
+        }else {
+          setSelf({myUsername: userData.data.username, myUserId: userData.data.userID})
+  
+          console.log(`Set the user data ${userData.data.username}`)
+        }
+        const socket = io('http://localhost:3001')
+        setSocket(socket)
+        socket.on('connect', () => {
+          socket.emit('initial_value', userData.data.userID  )
+        })
+  
+        socket.on("private_message", () => {
+  
+        })
+
+    }
+    useEffect(() => {
+      socketSetup();
+     
+    }, [])
     const arr = msgs
     .map((item) => {
       return (
@@ -23,7 +56,7 @@ function ChatComponent({username, userId}: {username: string, userId: string}) {
     const handleSubmit = () => {
         setMsgs([...msgs, {username: "Me", message: text , selfEnd: true}]); 
         setText('')
-        socket?.emit('message', {msg: text, room: "none"})
+        socket?.emit('message', {userId, msg: text})
       }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
@@ -46,11 +79,13 @@ function ChatComponent({username, userId}: {username: string, userId: string}) {
           className="flex-grow px-4 py-2 rounded-full border outline-none focus:ring-2 focus:ring-blue-500 transition"
           value={text}
           type="text"
-          placeholder="Type your message here..."
+          placeholder={!username  ? "Select a chat to get started" : "Type your message here..."}
+          disabled={!username }
         />
         <button
-          className="px-6 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+          className={`px-6 py-2 rounded-full ${username ? "bg-blue-500" : "bg-red-500"} text-white font-semibold hover:bg-blue-600 transition`}
           type="submit"
+          disabled={!username}
         >
           Send
         </button>
