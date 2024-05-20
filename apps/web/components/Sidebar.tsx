@@ -4,10 +4,14 @@
 import { useState } from 'react';
 import AddFriend from './AddFriend';
 
+interface sidebarContacts { 
+  username: string;
+  userId: string;
+}
 
-const Sidebar = ({setActiveUser} : {setActiveUser: () => {}}) => {
+const Sidebar = ({setActiveUser} : any) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
-  const [contacts, setContacts] = useState([])
+  const [contacts, setContacts] = useState<sidebarContacts[]>([])
   
     return (
       <div className="w-1/3 h-screen bg-white border-r shadow-lg">
@@ -18,24 +22,20 @@ const Sidebar = ({setActiveUser} : {setActiveUser: () => {}}) => {
           {!contacts.length && "No contacts yet"}
         </h1  >
         <div className="p-5 overflow-y-auto">
-          {contacts?.map(() => {
+          {contacts?.map((item, i) => {
             return (
-              <div className="space-y-5">
+              <div 
+              onClick={() => setActiveUser({ username: item.username, userId: item.userId })} 
+              key={i} 
+              className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
+            >
               <div className="flex items-center">
-                  <div>
-                      <h3 className="text-lg font-semibold">John Doe</h3>
-                      <p className="text-gray-500 text-sm">johndoe@example.com</p>
-                      <p className="text-gray-500 text-sm">(555) 555-5555</p>
-                  </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">{item.username}</h3>
+                </div>
               </div>
-              <div className="flex items-center">
-                  <div>
-                      <h3 className="text-lg font-semibold">Jane Smith</h3>
-                      <p className="text-gray-500 text-sm">janesmith@example.com</p>
-                      <p className="text-gray-500 text-sm">(555) 555-1234</p>
-                  </div>
-              </div>
-              </div>
+            </div>
+            
             )   
           }) 
         }

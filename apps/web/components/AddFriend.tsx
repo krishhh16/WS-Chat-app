@@ -44,12 +44,12 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => 
         <p className="text-gray-700 font-semibold">{result}</p>
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
-        users?.map((item, i) => {
+        users?.map((item: {username: string, userID: string}, i) => {
           return (
             <div
       className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
       onClick={() =>{ 
-        setSidebarContacts([...contacts, {username: item.username}])
+        setSidebarContacts([...contacts, {username: item.username, userId: item.userID}])
         console.log(contacts)
         setIsClicked(!isClicked)
         onClose();
