@@ -36,7 +36,6 @@ app.use(
 
 async function validateUser(req: Request, res: Response,next: NextFunction ){
   const token = req.cookies.token;
-  console.log(`this is the token that I've provided ${token}`)
   try {
   const decoded = jwt.verify(token, jwtSec) as JwtPayload;
   const user = await prisma.user.findFirst({
@@ -157,8 +156,16 @@ interface userObject {
 
 class Users{
   user: userObject[]
-  constructor() {
+  private static instance: Users;
+  private constructor() {
     this.user = []
+  }
+
+  public static getInstance(): Users {
+    if (!Users.instance) {
+      Users.instance = new Users()
+    }
+    return Users.instance;
   }
 
   addUser(userId: string, socketId: string) {
@@ -175,7 +182,7 @@ class Users{
     return this.user.find(item => item.userId === userId)?.socketId
   }
 }
-const users = new Users();
+
 
 
 io.on("connection", (socket) => {
@@ -190,7 +197,7 @@ io.on("connection", (socket) => {
     const user = users.findUser(userId)
     if (user) {
       io.to(user).emit('private_message', msg)
-      console.log(`sent message to ${userId} the message ${msg}`)
+      console.log(`sent message to ${userId} the message ${msg} with the socket id ${user}`)
     } else {
       console.log(`User ${userId} not found`)
     }
