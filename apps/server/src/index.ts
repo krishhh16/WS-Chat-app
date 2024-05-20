@@ -150,6 +150,32 @@ app.get("/get-user",validateUser, async (req, res) => {
 }
 })
 
+interface userObject {
+  userId: string;
+  socketId: string;
+}
+
+class users{
+  user: userObject[]
+  constructor() {
+    this.user = []
+  }
+
+  addUser(userId: string, socketId: string) {
+    this.user.push({userId, socketId})
+  }
+
+  RemoveUser(userId: string) {
+    const index = this.user.findIndex(item => item.userId === userId)
+
+    this.user.splice(index, 1)
+  }
+
+  findUser(userId: string){
+    return this.user.find(item => item.userId === userId)
+  }
+}
+
 io.on("connection", (socket) => {
   console.log(`User connected with id ${socket.id} `);
 
