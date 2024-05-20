@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {io, Socket} from 'socket.io-client'
 
 interface MsgType {
@@ -11,6 +11,14 @@ function ChatComponent({username, userId}: {username: string, userId: string}) {
     const [msgs, setMsgs] = useState<MsgType[]>([]);
     const [text, setText] = useState<string>("");
     const [socket, setSocket] = useState<Socket|null>(null);
+
+    useEffect(() => {
+      handleUserIdentity();
+    }, [])
+
+    async function handleUserIdentity() {
+
+    }
     const arr = msgs
     .map((item) => {
       return (

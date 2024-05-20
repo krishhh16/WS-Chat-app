@@ -12,7 +12,7 @@ const GoingChat = () => {
     userId: ""
   })
   useEffect(() => {
-
+    userDetails();
   }, [])
 
   async function userDetails() {
@@ -29,7 +29,7 @@ const GoingChat = () => {
   return (
     <div className="flex">
       {
-        !isUser ?
+        isUser ?
         <>
         <Sidebar/>
         <ChatComponent username={activeUser.username}  userId={activeUser.userId} /> 
