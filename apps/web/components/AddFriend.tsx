@@ -1,12 +1,11 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-const AddFriend = ({ onClose }) => {
+import { useState } from "react";
+const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
     const [users, setUsers] = useState([])
-
 
     async function handleQuery(e : any) {
       setLoading(true)
@@ -50,6 +49,8 @@ const AddFriend = ({ onClose }) => {
             <div
       className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
       onClick={() =>{ 
+        setSidebarContacts([...contacts, {username: item.username}])
+        console.log(contacts)
         setIsClicked(!isClicked)
         onClose();
       }
@@ -66,7 +67,10 @@ const AddFriend = ({ onClose }) => {
       </div>
         </div>
           <button
-            onClick={onClose}
+            onClick={() => {
+              // setActiveUser({username: item.username, userId: item.userId})
+              onClose()
+            }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
           >
             Close

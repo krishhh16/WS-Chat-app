@@ -31,7 +31,7 @@ const GoingChat = () => {
       {
         isUser ?
         <>
-        <Sidebar/>
+        <Sidebar setActiveUser={setActiveUser} />
         <ChatComponent username={activeUser.username}  userId={activeUser.userId} /> 
         </>
         :
