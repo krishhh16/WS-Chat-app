@@ -154,57 +154,68 @@ interface userObject {
   socketId: string;
 }
 
-class Users{
-  user: userObject[]
+class Users {
+  private user: userObject[];
   private static instance: Users;
+  
   private constructor() {
-    this.user = []
+    this.user = [];
   }
 
   public static getInstance(): Users {
     if (!Users.instance) {
-      Users.instance = new Users()
+      Users.instance = new Users();
     }
     return Users.instance;
   }
 
-  addUser(userId: string, socketId: string) {
-    this.user.push({userId, socketId})
+  public addUser(userId: string, socketId: string): void {
+    const existingUserIndex = this.user.findIndex(item => item.userId === userId);
+    if (existingUserIndex !== -1) {
+      // Update socketId for the existing user
+      this.user[existingUserIndex].socketId = socketId;
+    } else {
+      // Add new user
+      this.user.push({ userId, socketId });
+    }
   }
 
-  RemoveUser(userId: string) {
-    const index = this.user.findIndex(item => item.userId === userId)
-
-    this.user.splice(index, 1)
+  public removeUser(socketId: string): void {
+    const index = this.user.findIndex(item => item.socketId === socketId);
+    if (index !== -1) {
+      this.user.splice(index, 1);
+    }
   }
 
-  findUser(userId: string){
-    return this.user.find(item => item.userId === userId)?.socketId
+  public findUser(userId: string): string | undefined {
+    return this.user.find(item => item.userId === userId)?.socketId;
   }
 }
 
-
+const users = Users.getInstance();
 
 io.on("connection", (socket) => {
-  console.log(`User connected with id ${socket.id} `);
-  
   socket.on('initial_value', (userId: string) => {
     users.addUser(userId, socket.id);
-    console.log(`Server Received message ${userId} with the socket id ${socket.id}`)
-  })
+    console.log(`Server Received message ${userId} with the socket id ${socket.id}`);
+  });
 
-  socket.on("message", ({userId, msg}: {userId: string, msg: string}) =>{
-    const user = users.findUser(userId)
-    if (user) {
-      io.to(user).emit('private_message', msg)
-      console.log(`sent message to ${userId} the message ${msg} with the socket id ${user}`)
+  socket.on("message", ({ userId, msg }: { userId: string; msg: string }) => {
+    const socketId = users.findUser(userId);
+    if (socketId) {
+      io.to(socketId).emit('private_message', msg);
+      console.log(`Sent message to ${userId} the message ${msg} with the socket id ${socketId}`);
     } else {
-      console.log(`User ${userId} not found`)
+      console.log(`User ${userId} not found`);
     }
-  })
+  });
 
-})
+  socket.on('disconnect', () => {
+    users.removeUser(socket.id);
+    console.log(`Socket ${socket.id} disconnected and removed from users list`);
+  });
+});
 
 server.listen(port, () => {
-  console.log(`server running on ${port}`)
-})
+  console.log(`Server running on ${port}`);
+});
