@@ -197,16 +197,16 @@ const users = Users.getInstance();
 io.on("connection", (socket) => {
   socket.on('initial_value', (userId: string) => {
     users.addUser(userId, socket.id);
-    console.log(`Server Received message ${userId} with the socket id ${socket.id}`);
+    console.log(`Server Received userId ${userId} with the socket id ${socket.id}`);
   });
 
-  socket.on("message", ({ userId, msg, fromUser }: {fromUser: string, userId: string; msg: string }) => {
-    const socketId = users.findUser(userId);
+  socket.on("message", ({ fromUserId, msg, fromUser }: {fromUser: string, userId: string; msg: string, fromUserId: string }) => {
+    const socketId = users.findUser(fromUserId);
     if (socketId) {
-      io.to(socketId).emit('private_message', {msg, fromUser});
-      console.log(`Sent message to ${userId} the message ${msg} with the socket id ${socketId}`);
+      io.to(socketId).emit('private_message', {msg, fromUser,fromUserId});
+      console.log(`Sent message to ${fromUserId} the message ${msg} with the socket id ${socketId}`);
     } else {
-      console.log(`User ${userId} not found`);
+      console.log(`User ${fromUserId} not found`);
     }
   });
 

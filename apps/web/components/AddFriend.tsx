@@ -45,6 +45,8 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => 
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users?.map((item: {username: string, userID: string}, i: number) => {
+          
+
           return (
             <div key={i}
       className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"

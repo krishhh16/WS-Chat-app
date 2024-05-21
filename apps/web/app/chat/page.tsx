@@ -10,13 +10,22 @@ interface sidebarContacts {
   username: string;
   userId: string;
 }
+interface SelfData{
+  myUsername: string;
+  myUserId: string;
+}
+
 const GoingChat = () => {
-  const [isUser, setIsUser] = useState(false)
+  const [isUser, setIsUser] = useState<SelfData>({
+    myUsername: "",
+    myUserId: ""
+  })
   const [contacts, setContacts] = useState<sidebarContacts[]>([])
   const [activeUser, setActiveUser] = useState({
     username: "",
     userId: ""
   })
+
   useEffect(() => {
     userDetails();
   }, [])
@@ -27,7 +36,7 @@ const GoingChat = () => {
       alert("Please login before starting a new Chat")
       return
     }else {
-      setIsUser(true)
+      setIsUser({myUsername: user.data.username, myUserId: user.data.userID})
     }
   }
 
@@ -37,7 +46,7 @@ const GoingChat = () => {
         isUser ?
         <>
         <Sidebar setActiveUser={setActiveUser}  contacts={contacts} setContacts={setContacts} />
-        <ChatComponent contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> 
+        <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> 
         </>
         :
         <>
