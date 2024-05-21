@@ -14,13 +14,16 @@ interface SelfData{
   myUsername: string;
   myUserId: string;
 }
-
+interface userType {
+  username: string;
+  userId: string
+}
 const GoingChat = () => {
   const [isUser, setIsUser] = useState<SelfData>({
     myUsername: "",
     myUserId: ""
   })
-  const [contacts, setContacts] = useState<sidebarContacts[]>([])
+  const [contacts, setContacts] = useState<userType[]>([])
   const [activeUser, setActiveUser] = useState({
     username: "",
     userId: ""

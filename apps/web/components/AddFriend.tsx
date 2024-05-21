@@ -32,7 +32,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => 
           <h2 className="text-2xl font-bold mb-4">Talk to your friend!</h2>
           <div>
         <label className={"block text-sm font-medium text-gray-700"}>Add user</label>
-        <input className={ "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none focus:border-indigo-500"} value={username} placeholder='Please enter your username' onChange={handleQuery} />
+        <input className={ "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none w-full focus:border-indigo-500"} value={username} placeholder={"Please enter your friend's username"} onChange={handleQuery} />
         { isLoading &&
         <div className="flex items-center justify-center">
       <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-blue-500"></div>
@@ -45,8 +45,6 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => 
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users?.map((item: {username: string, userID: string}, i: number) => {
-          
-
           return (
             <div key={i}
       className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"

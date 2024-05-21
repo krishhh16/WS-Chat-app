@@ -1,15 +1,21 @@
 'use client'
 
 // Sidebar.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 import AddFriend from './AddFriend';
 
-interface sidebarContacts { 
+interface userType {
   username: string;
-  userId: string;
+  userId: string
 }
 
-const Sidebar = ({setActiveUser, setContacts, contacts} : any) => {
+interface SidebarPropType {
+  setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
+  setContacts: React.Dispatch<React.SetStateAction<userType>>;
+  contacts: userType[]
+}
+
+const Sidebar = ({setActiveUser, setContacts, contacts}: SidebarPropType) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
  
     return (
