@@ -200,10 +200,10 @@ io.on("connection", (socket) => {
     console.log(`Server Received message ${userId} with the socket id ${socket.id}`);
   });
 
-  socket.on("message", ({ userId, msg }: { userId: string; msg: string }) => {
+  socket.on("message", ({ userId, msg, fromUser }: {fromUser: string, userId: string; msg: string }) => {
     const socketId = users.findUser(userId);
     if (socketId) {
-      io.to(socketId).emit('private_message', msg);
+      io.to(socketId).emit('private_message', {msg, fromUser});
       console.log(`Sent message to ${userId} the message ${msg} with the socket id ${socketId}`);
     } else {
       console.log(`User ${userId} not found`);

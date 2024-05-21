@@ -12,7 +12,7 @@ interface SelfData{
   userId: string;
 }
 
-function ChatComponent({username, userId}: {username: string, userId: string}) {
+function ChatComponent({username, userId, contacts, setContacts}: any) {
     const [msgs, setMsgs] = useState<MsgType[]>([]);
     const [text, setText] = useState<string>("");
     const [socket, setSocket] = useState<Socket|null>(null);
@@ -37,8 +37,8 @@ function ChatComponent({username, userId}: {username: string, userId: string}) {
           socket.emit('initial_value', userData.data.userID  )
         })
   
-        socket.on("private_message", (msg: string) => {
-          console.log(`You've received a message ${msg}`)          
+        socket.on("private_message", ({msg, fromUser}: {msg: string, fromUser: string}) => {
+          console.log(`You've received a message ${msg} from User ${fromUser}`)          
         })
 
     }
@@ -50,7 +50,7 @@ function ChatComponent({username, userId}: {username: string, userId: string}) {
     const handleSubmit = () => {
         setMsgs([...msgs, {username: "Me", message: text , selfEnd: true}]); 
         setText('')
-        socket?.emit('message', {userId, msg: text})
+        socket?.emit('message', {userId, msg: text, fromUser: selfData.myUsername})
       }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">

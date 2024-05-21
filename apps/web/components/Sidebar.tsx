@@ -9,10 +9,9 @@ interface sidebarContacts {
   userId: string;
 }
 
-const Sidebar = ({setActiveUser} : any) => {
+const Sidebar = ({setActiveUser, setContacts, contacts} : any) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
-  const [contacts, setContacts] = useState<sidebarContacts[]>([])
-  
+ 
     return (
       <div className="w-1/3 h-screen bg-white border-r shadow-lg">
         <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
