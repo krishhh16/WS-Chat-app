@@ -48,7 +48,7 @@ const GoingChat = () => {
       {
         isUser ?
         <>
-        <Sidebar setActiveUser={setActiveUser}  contacts={contacts} setContacts={setContacts} />
+        <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
         <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> 
         </>
         :

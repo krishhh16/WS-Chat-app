@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => {
+const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
     const [result, setResultText] = useState("")
@@ -45,10 +45,13 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser }) => 
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users?.map((item: {username: string, userID: string}, i: number) => {
+          if (userData?.username === username) {
+            return
+          }
           return (
             <div key={i}
-      className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
-      onClick={() =>{ 
+              className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
+              onClick={() =>{ 
         setSidebarContacts([...contacts, {username: item.username, userId: item.userID}])
         setActiveUser({username: item.username, userId: item.userID})
         console.log(contacts)

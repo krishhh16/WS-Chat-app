@@ -12,10 +12,11 @@ interface userType {
 interface SidebarPropType {
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
   setContacts: React.Dispatch<React.SetStateAction<userType>>;
-  contacts: userType[]
+  contacts: userType[];
+  userData: {myUsername: string,myUserId: string}
 }
 
-const Sidebar = ({setActiveUser, setContacts, contacts}: SidebarPropType) => {
+const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropType) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
  
     return (
@@ -54,7 +55,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts}: SidebarPropType) => {
            Add Friend!! 
         </button>
         {addFriendModal && (
-          <AddFriend contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+          <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
         )}
                 </div>
         </div>
