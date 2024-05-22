@@ -6,10 +6,6 @@ import ChatComponent from '../../components/ChatComponent';
 import axios from 'axios';
 import Unauthorized from '../../components/unauthorized';
 
-interface sidebarContacts { 
-  username: string;
-  userId: string;
-}
 interface SelfData{
   myUsername: string;
   myUserId: string;
@@ -46,7 +42,8 @@ const GoingChat = () => {
   return (
     <div className="flex">
       {
-        isUser ?
+        isUser 
+        ?
         <>
         <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
         <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> 

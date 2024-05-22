@@ -12,10 +12,20 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
-  userID String @id @default(uuid())
+  userID   String   @id @default(uuid())
   username String
-  email String
+  email    String
   password String
+  sentMessages   Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model Message {
+  id         String @id @default(uuid())
+  content    String
+  fromUser   User   @relation("SentMessages", fields: [fromUserId], references: [userID])
+  fromUserId String
+  toUser     User   @relation("ReceivedMessages", fields: [toUserId], references: [userID])
+  toUserId   String
 }
