@@ -149,23 +149,6 @@ app.get("/get-user", validateUser, async (req, res) => {
   }
 });
 
-app.post('/messages', validateUser, async (req, res) => {
-  const { fromUserId, toUserId, msg } = req.body;
-  try {
-    await prisma.message.create({
-      data: {
-        content: msg,
-        fromUserId,
-        toUserId,
-      }
-    });
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, err: "Internal server error" });
-  }
-});
-
 interface userObject {
   userId: string;
   socketId: string;
@@ -226,17 +209,7 @@ io.on("connection", (socket) => {
       console.log(`User ${toUserId} not found`);
     }
 
-    try {
-      await prisma.message.create({
-        data: {
-          content: msg,
-          fromUserId,
-          toUserId,
-        }
-      });
-    } catch (err) {
-      console.error('Error storing message:', err);
-    }
+   
   });
 
   socket.on('disconnect', () => {
