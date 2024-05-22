@@ -1,4 +1,14 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "userID" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("userID")
+);
+
+-- CreateTable
 CREATE TABLE "Message" (
     "id" TEXT NOT NULL,
     "content" TEXT NOT NULL,
@@ -6,6 +16,15 @@ CREATE TABLE "Message" (
     "toUserId" TEXT NOT NULL,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AddedFriends" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "followId" TEXT NOT NULL,
+
+    CONSTRAINT "AddedFriends_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

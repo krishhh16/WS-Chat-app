@@ -1,37 +1,33 @@
 import axios from 'axios';
-import { stringify } from 'querystring';
-import React, {useState, useEffect, useCallback} from 'react'
-import {io, Socket} from 'socket.io-client'
+import React, { useState, useEffect, useCallback } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 interface MsgType {
   username: string;
   message: string;
   selfEnd: boolean;
 }
+
 interface SelfData {
   myUsername: string;
   myUserId: string;
 }
 
-function ChatComponent({username, userId, setActiveUser, setContacts}: any) {
+function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
   const [msgs, setMsgs] = useState<MsgType[]>([]);
   const [text, setText] = useState<string>("");
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [selfData, setSelf] = useState<SelfData>({
-    myUsername: "",
-    myUserId: ""
-  });
+  const [selfData, setSelf] = useState<SelfData>({ myUsername: "", myUserId: "" });
 
   const socketSetup = useCallback(async () => {
     const userData = await axios.get('http://localhost:3001/user', { withCredentials: true });
 
     if (!userData.data.success) {
       alert('Please Login before sending messages');
-    } else {
-      setSelf({ myUsername: userData.data.username, myUserId: userData.data.userID });
-
-      console.log(`Set the user data ${userData.data.username}`);
+      return;
     }
+
+    setSelf({ myUsername: userData.data.username, myUserId: userData.data.userID });
 
     const newSocket = io('http://localhost:3001');
     setSocket(newSocket);
@@ -40,33 +36,36 @@ function ChatComponent({username, userId, setActiveUser, setContacts}: any) {
       newSocket.emit('initial_value', userData.data.userID);
     });
 
-    newSocket.on("private_message", ({ msg, fromUser, fromUserId }: { msg: string; fromUser: string, fromUserId: string }) => {
+    newSocket.on("private_message", ({ msg, fromUser, fromUserId, toUserId }: { toUserId: string, msg: string; fromUser: string, fromUserId: string }) => {
       console.log(`You've received a message ${msg} from User ${fromUser}`);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
-      setContacts((prevMsgs: {username: string, userId: string}[]) => {console.log(prevMsgs);
-         if (prevMsgs.find(item => item.username === fromUser)) {
-            return [...prevMsgs]
-         }  
-         return [...prevMsgs, {username: fromUser, userId: fromUserId}]})
-      setActiveUser({username: fromUser, userId: fromUserId})
+      setContacts((prevContacts: { username: string; userId: string; }[]) => {
+        if (!prevContacts.some(contact => contact.userId === fromUserId)) {
+          return [...prevContacts, { username: fromUser, userId: fromUserId }];
+        }
+        return prevContacts;
+      });
+      setActiveUser({ username: fromUser, userId: fromUserId });
     });
 
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [setContacts, setActiveUser]);
 
   useEffect(() => {
     socketSetup();
   }, [socketSetup]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (text.trim() === "") return;
 
-    setMsgs((prevMsgs) =>{
-      return [...prevMsgs, { username: "Me", message: text, selfEnd: true }]});
-      setText('');
-      socket?.emit('message', { fromUserId: userId, msg: text, fromUser: selfData.myUsername });
+    setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
+    const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
+    setText('');
+    socket?.emit('message', msgPayload);
+    
+    await axios.post('http://localhost:3001/messages', msgPayload, { withCredentials: true });
   };
 
   return (
@@ -76,7 +75,7 @@ function ChatComponent({username, userId, setActiveUser, setContacts}: any) {
           {username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}
         </div>
         <div className="flex-grow p-5 overflow-y-auto bg-gray-50">
-          {msgs?.map((item, i) => (
+          {msgs.map((item, i) => (
             <Message key={i} index={i} username={item.username} text={item.message} selfEnd={item.selfEnd} />
           ))}
         </div>
