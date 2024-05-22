@@ -29,3 +29,9 @@ model Message {
   toUser     User   @relation("ReceivedMessages", fields: [toUserId], references: [userID])
   toUserId   String
 }
+
+model AddedFriends {
+  id String @id @default(uuid())
+  userId String
+  followId String
+}

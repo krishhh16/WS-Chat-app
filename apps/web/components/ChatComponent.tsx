@@ -43,7 +43,11 @@ function ChatComponent({username, userId, setActiveUser, setContacts}: any) {
     newSocket.on("private_message", ({ msg, fromUser, fromUserId }: { msg: string; fromUser: string, fromUserId: string }) => {
       console.log(`You've received a message ${msg} from User ${fromUser}`);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
-      setContacts((prevMsgs: {username: string, userId: string}[]) => [...prevMsgs, {username: fromUser, userId: fromUserId}])
+      setContacts((prevMsgs: {username: string, userId: string}[]) => {console.log(prevMsgs);
+         if (prevMsgs.find(item => item.username === fromUser)) {
+            return [...prevMsgs]
+         }  
+         return [...prevMsgs, {username: fromUser, userId: fromUserId}]})
       setActiveUser({username: fromUser, userId: fromUserId})
     });
 
@@ -59,9 +63,10 @@ function ChatComponent({username, userId, setActiveUser, setContacts}: any) {
   const handleSubmit = () => {
     if (text.trim() === "") return;
 
-    setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
-    setText('');
-    socket?.emit('message', { fromUserId: userId, msg: text, fromUser: selfData.myUsername });
+    setMsgs((prevMsgs) =>{
+      return [...prevMsgs, { username: "Me", message: text, selfEnd: true }]});
+      setText('');
+      socket?.emit('message', { fromUserId: userId, msg: text, fromUser: selfData.myUsername });
   };
 
   return (

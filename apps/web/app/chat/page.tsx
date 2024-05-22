@@ -15,6 +15,7 @@ interface userType {
   userId: string
 }
 const GoingChat = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isUser, setIsUser] = useState<SelfData>({
     myUsername: "",
     myUserId: ""
@@ -36,13 +37,14 @@ const GoingChat = () => {
       return
     }else {
       setIsUser({myUsername: user.data.username, myUserId: user.data.userID})
+      setIsLoggedIn(true)
     }
   }
 
   return (
     <div className="flex">
       {
-        isUser 
+        isLoggedIn 
         ?
         <>
         <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
