@@ -1,22 +1,21 @@
+
 import axios from "axios";
-import { useState } from "react";
-const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
-    const [username, setUserName] = useState("")
+import React, { useState } from "react";
+const NewGroup = ({ onClose }: {onClose: React.Dispatch<React.SetStateAction<boolean>>}) => {
     const [formData, setForm] = useState({
-        username: "",
-        email: ""
+        groupName: "",
+        bio: ""
     }) 
-    async function handleSubmit() {
-        
+    async function handleSubmit(e: any) {
+        e.preventDefault();
         try{
-        const response = await axios.post('http://localhost:3001/add-group', formData)
+        const response = await axios.post('http://localhost:3001/make-groups', formData, {withCredentials: true})
         if(!response.data.success) {
             alert("the group with this name already exists")
             return
         }else {
             alert("Group created successfully!")
-            window.location.href = 'http://localhost:3000/signin'
-            onClose(); 
+            onClose(false); 
         }
     }catch (err){   
 
@@ -33,21 +32,21 @@ const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userDa
       <form onSubmit={handleSubmit} >
         <div>
             <label className={inputLabel}>Group Name</label>
-            <input className={inputClassName} value={formData.username} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, username: e.target.value})}} />
+            <input className={inputClassName} value={formData.groupName} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, groupName: e.target.value})}} />
         </div>
         <div>
             <label className={inputLabel}>A short bio</label>
-            <input className={inputClassName} value={formData.email} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, email: e.target.value})}} />
+            <input className={inputClassName} value={formData.bio} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, bio: e.target.value})}} />
         </div>
         <div className="flex mt-4 justify-center">
-        <button onClick={() => {handleSubmit()}} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out" >Submit</button>
+        <button  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out" >Submit</button>
         </div>
       </form>
     </div>
     <button
             onClick={() => {
               // setActiveUser({username: item.username, userId: item.userId})
-              onClose()
+              onClose(false)
             }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
           >

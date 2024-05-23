@@ -45,14 +45,19 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users?.map((item: {username: string, userID: string}, i: number) => {
-          if (userData?.username === username) {
+          if (userData?.username === item.username) {
             return
-          }
+          } else{
           return (
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
-        setSidebarContacts([...contacts, {username: item.username, userId: item.userID}])
+                setSidebarContacts((prevContacts: { username: string; userId: string; }[]) => {
+                  if (!prevContacts.some(contact => contact.userId === item.username)) {
+                    return [...prevContacts, { username: item.username, userId: item.userID }];
+                  }
+                  return prevContacts;
+                });
         setActiveUser({username: item.username, userId: item.userID})
         console.log(contacts)
         setIsClicked(!isClicked)
@@ -63,7 +68,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
     >
       <p className="text-black font-semibold">{item.username}</p>
     </div>
-          )
+          )}
         })
         }
         </>

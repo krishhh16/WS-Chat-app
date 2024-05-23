@@ -15,9 +15,10 @@ interface SidebarPropType {
   setContacts: React.Dispatch<React.SetStateAction<userType>>;
   contacts: userType[];
   userData: {myUsername: string,myUserId: string}
+  setIsRoom: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropType) => {
+const Sidebar = ({setActiveUser, setContacts, contacts, userData, setIsRoom}: SidebarPropType) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
   const [addFriendModal2, setAddFriendModal2] = useState(false);
   const [addFriendModal3, setAddFriendModal3] = useState(false);
@@ -68,7 +69,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                Add Group
                 </button>
                 {addFriendModal2 && (
-                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
+                <AddGroup setIsRoom={setIsRoom} userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
                  )}
             </div>
             <div className="" >

@@ -25,6 +25,7 @@ const GoingChat = () => {
     username: "",
     userId: ""
   })
+  const [isRoom, setIsRoom] = useState(false)
 
   useEffect(() => {
     userDetails();
@@ -47,8 +48,8 @@ const GoingChat = () => {
         isLoggedIn 
         ?
         <>
-        <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
-        <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> 
+        <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setIsRoom={setIsRoom} setContacts={setContacts} />
+        {isRoom ? <div></div> : <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> }
         </>
         :
         <>
