@@ -179,6 +179,43 @@ app.get("/get-groups", validateUser, async (req, res) => {
   }
 });
 
+app.post("/make-groups", validateUser, async (req, res) => {
+  const { name, bio } = req.body;
+
+  if (!name || !bio) {
+    return res.json({success: false })
+  }
+
+  try{
+    const groupExists = prisma.groups.findFirst({
+      where: {
+        name
+      }
+    })
+
+    if (!groupExists) {
+      return res.json({success: false, msg: 'group already exists'})
+    }
+    
+    const authorId: string = await req.userDetails?.userID as string
+    await prisma.groups.create({
+      data: {
+        name,
+        authorId
+      }
+    })
+
+    return res.json({success: true})
+
+
+  }catch(err){ 
+    return res.json({success: false, msg: 'internal server error'})
+  }
+
+});
+
+
+
 interface userObject {
   userId: string;
   socketId: string;

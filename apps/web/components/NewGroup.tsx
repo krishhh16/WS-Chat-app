@@ -5,25 +5,23 @@ const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userDa
     const [formData, setForm] = useState({
         username: "",
         email: ""
-    })
-    async function handleSubmit(e: any) {
-        e.preventDefault();
+    }) 
+    async function handleSubmit() {
+        
         try{
         const response = await axios.post('http://localhost:3001/add-group', formData)
         if(!response.data.success) {
-            alert("the group with this name ")
+            alert("the group with this name already exists")
             return
         }else {
-            alert("user signed up successfully!")
+            alert("Group created successfully!")
             window.location.href = 'http://localhost:3000/signin'
-            
+            onClose(); 
         }
     }catch (err){   
 
     }
     }
-
-    
     const inputLabel = "block text-sm font-medium text-gray-700"
     const inputClassName = "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none focus:border-indigo-500"
     
@@ -42,7 +40,7 @@ const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userDa
             <input className={inputClassName} value={formData.email} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, email: e.target.value})}} />
         </div>
         <div className="flex mt-4 justify-center">
-        <button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out"  type="submit">Submit</button>
+        <button onClick={() => {handleSubmit()}} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out" >Submit</button>
         </div>
       </form>
     </div>
@@ -54,7 +52,7 @@ const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userDa
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
           >
             Close
-          </button>
+    </button>
     </div>
       </div>
     );

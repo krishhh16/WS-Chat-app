@@ -19,6 +19,8 @@ interface SidebarPropType {
 
 const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropType) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
+  const [addFriendModal2, setAddFriendModal2] = useState(false);
+  const [addFriendModal3, setAddFriendModal3] = useState(false);
  
     return (
       <div className="w-1/3 h-screen bg-white border-r shadow-lg">
@@ -59,24 +61,24 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                 </div>
             <div>
                 <button
-                  onClick={() => setAddFriendModal(true)}
+                  onClick={() => setAddFriendModal2(true)}
                   className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Add Group
                 </button>
-                {addFriendModal && (
-                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+                {addFriendModal2 && (
+                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
                  )}
             </div>
             <div className="" >
                 <button
-                  onClick={() => setAddFriendModal(true)}
+                  onClick={() => setAddFriendModal3(true)}
                   className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Create Group
                 </button>
-                {addFriendModal && (
-                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+                {addFriendModal3 && (
+                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal3(false)} />
                  )}
             </div>
         </div>

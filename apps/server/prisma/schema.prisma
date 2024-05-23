@@ -13,7 +13,6 @@ model User {
   password String
   sentMessages   Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
-  Groups   Groups[]
 }
 
 model Message {
