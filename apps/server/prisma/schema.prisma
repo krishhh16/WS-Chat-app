@@ -34,4 +34,5 @@ model Groups {
   id        String  @id @default(uuid())
   authorId  String
   name      String @unique
+  bio       String
 }
