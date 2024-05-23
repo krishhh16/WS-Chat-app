@@ -180,16 +180,16 @@ app.get("/get-groups", validateUser, async (req, res) => {
 });
 
 app.post("/make-groups", validateUser, async (req, res) => {
-  const { name, bio } = req.body;
+  const { groupName, bio } = req.body;
 
-  if (!name || !bio) {
+  if (!groupName || !bio) {
     return res.json({success: false })
   }
 
   try{
     const groupExists = prisma.groups.findFirst({
       where: {
-        name
+        name: groupName
       }
     })
 
@@ -200,8 +200,9 @@ app.post("/make-groups", validateUser, async (req, res) => {
     const authorId: string = await req.userDetails?.userID as string
     await prisma.groups.create({
       data: {
-        name,
-        authorId
+        name: groupName,
+        authorId,
+        bio
       }
     })
 
@@ -209,6 +210,7 @@ app.post("/make-groups", validateUser, async (req, res) => {
 
 
   }catch(err){ 
+    console.log(err)
     return res.json({success: false, msg: 'internal server error'})
   }
 
