@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-const AddFriend = ({setIsRoom, contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
+const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
     const [username, setUserName] = useState("")
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
@@ -51,8 +51,7 @@ const AddFriend = ({setIsRoom, contacts, onClose, setSidebarContacts, setActiveU
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
-        setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy}])
-        setIsRoom(true)
+        setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy, isRoom: true}])
         console.log(contacts)
        
         onClose();

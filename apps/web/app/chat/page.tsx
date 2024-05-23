@@ -5,6 +5,7 @@ import Sidebar from '../../components/Sidebar';
 import ChatComponent from '../../components/ChatComponent';
 import axios from 'axios';
 import Unauthorized from '../../components/unauthorized';
+import { Tulpen_One } from 'next/font/google';
 
 interface SelfData{
   myUsername: string;
@@ -13,19 +14,20 @@ interface SelfData{
 interface userType {
   username: string;
   userId: string
+  isRoom: boolean
 }
 const GoingChat = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isUser, setIsUser] = useState<SelfData>({
     myUsername: "",
-    myUserId: ""
+    myUserId: "",
   })
   const [contacts, setContacts] = useState<userType[]>([])
   const [activeUser, setActiveUser] = useState({
     username: "",
-    userId: ""
+    userId: "",
+    isRoom: false,
   })
-  const [isRoom, setIsRoom] = useState(false)
 
   useEffect(() => {
     userDetails();
@@ -48,8 +50,8 @@ const GoingChat = () => {
         isLoggedIn 
         ?
         <>
-        <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setIsRoom={setIsRoom} setContacts={setContacts} />
-        {isRoom ? <div></div> : <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> }
+        <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
+        {activeUser.isRoom ? <div></div> : <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> }
         </>
         :
         <>

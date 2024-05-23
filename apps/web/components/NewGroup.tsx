@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import React, { useState } from "react";
-const NewGroup = ({ onClose }: {onClose: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: {onClose: React.Dispatch<React.SetStateAction<boolean>>, setSidebarContacts: React.Dispatch<React.SetStateAction<{username: string; userId: string; isRoom: boolean}[]>>, setActiveUser: React.Dispatch<React.SetStateAction<{username: string; userId: string; isRoom: boolean}>>}) => {
     const [formData, setForm] = useState({
         groupName: "",
         bio: ""
@@ -15,6 +15,9 @@ const NewGroup = ({ onClose }: {onClose: React.Dispatch<React.SetStateAction<boo
             return
         }else {
             alert("Group created successfully!")
+            const res = await axios.get('http://localhost:3001/user', {withCredentials: true})
+            setSidebarContacts(prevVal => [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }] )
+            setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true})
             onClose(false); 
         }
     }catch (err){   
@@ -45,7 +48,6 @@ const NewGroup = ({ onClose }: {onClose: React.Dispatch<React.SetStateAction<boo
     </div>
     <button
             onClick={() => {
-              // setActiveUser({username: item.username, userId: item.userId})
               onClose(false)
             }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"

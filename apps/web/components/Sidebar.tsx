@@ -7,7 +7,8 @@ import AddGroup from './AddGroup';
 import NewGroup from './NewGroup';
 interface userType {
   username: string;
-  userId: string
+  userId: string, 
+  isRoom: boolean
 }
 
 interface SidebarPropType {
@@ -18,7 +19,7 @@ interface SidebarPropType {
   setIsRoom: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Sidebar = ({setActiveUser, setContacts, contacts, userData, setIsRoom}: SidebarPropType) => {
+const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropType) => {
   const [addFriendModal, setAddFriendModal] = useState(false);
   const [addFriendModal2, setAddFriendModal2] = useState(false);
   const [addFriendModal3, setAddFriendModal3] = useState(false);
@@ -35,7 +36,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData, setIsRoom}: Si
           {contacts?.map((item, i) => {
             return (
               <div
-              onClick={() => setActiveUser({ username: item.username, userId: item.userId })} 
+              onClick={() => setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom })} 
               key={i} 
               className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
             >
@@ -69,7 +70,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData, setIsRoom}: Si
                Add Group
                 </button>
                 {addFriendModal2 && (
-                <AddGroup setIsRoom={setIsRoom} userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
+                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
                  )}
             </div>
             <div className="" >
@@ -80,7 +81,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData, setIsRoom}: Si
                Create Group
                 </button>
                 {addFriendModal3 && (
-                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal3(false)} />
+                <NewGroup setSidebarContacts={setContacts} setActiveUser={setActiveUser}  onClose={() => setAddFriendModal3(false)} />
                  )}
             </div>
         </div>
