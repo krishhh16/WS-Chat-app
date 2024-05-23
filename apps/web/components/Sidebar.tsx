@@ -3,7 +3,8 @@
 // Sidebar.jsx
 import React, { useState } from 'react';
 import AddFriend from './AddFriend';
-
+import AddGroup from './AddGroup';
+import NewGroup from './NewGroup';
 interface userType {
   username: string;
   userId: string
@@ -30,7 +31,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
         <div className="p-5 overflow-y-auto">
           {contacts?.map((item, i) => {
             return (
-              <div 
+              <div
               onClick={() => setActiveUser({ username: item.username, userId: item.userId })} 
               key={i} 
               className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
@@ -45,19 +46,39 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )   
           }) 
         }
-            <div>
-                  
+            <div className='mb-5'>
                 <button
                     onClick={() => setAddFriendModal(true)}
                     className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
-        >
-         
-           Add Friend!! 
-        </button>
-        {addFriendModal && (
-          <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
-        )}
+                >
+                  Add Friend!! 
+                </button>
+          {addFriendModal && (
+            <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+          )}
                 </div>
+            <div>
+                <button
+                  onClick={() => setAddFriendModal(true)}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                >
+               Add Group!!
+                </button>
+                {addFriendModal && (
+                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+                 )}
+            </div>
+            <div>
+                <button
+                  onClick={() => setAddFriendModal(true)}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                >
+               Create Group!!
+                </button>
+                {addFriendModal && (
+                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+                 )}
+            </div>
         </div>
       </div>
     );

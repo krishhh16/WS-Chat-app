@@ -149,6 +149,36 @@ app.get("/get-user", validateUser, async (req, res) => {
   }
 });
 
+app.get("/get-groups", validateUser, async (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.json({ success: false, msg: "query not provided" });
+  }
+
+  try {
+    const user = await prisma.groups.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: String(query),
+              mode: "insensitive"
+            }
+          }
+        ]
+      }
+    });
+    const users = user.map((item) => {
+      return { groupName: item.name, createdBy: item.authorId };
+    });
+    res.json({ users, success: true });
+  } catch (err) {
+    console.error(err);
+    return res.send("Internal server error");
+  }
+});
+
 interface userObject {
   userId: string;
   socketId: string;

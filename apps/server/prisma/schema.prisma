@@ -13,6 +13,7 @@ model User {
   password String
   sentMessages   Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  Groups   Groups[]
 }
 
 model Message {
@@ -25,7 +26,14 @@ model Message {
 }
 
 model AddedFriends {
-  id String @id @default(uuid())
-  userId String
-  followId String
+  id         String @id @default(uuid())
+  userId     String
+  followId   String
+}
+
+model Groups {
+  id        String  @id @default(uuid())
+  createdBy User    @relation(fields: [authorId], references: [userID])
+  authorId  String
+  name      String
 }
