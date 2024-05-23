@@ -33,7 +33,6 @@ model AddedFriends {
 
 model Groups {
   id        String  @id @default(uuid())
-  createdBy User    @relation(fields: [authorId], references: [userID])
   authorId  String
-  name      String
+  name      String @unique
 }

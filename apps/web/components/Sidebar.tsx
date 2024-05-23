@@ -51,7 +51,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                     onClick={() => setAddFriendModal(true)}
                     className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
-                  Add Friend!! 
+                  Add Friend
                 </button>
           {addFriendModal && (
             <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
@@ -62,18 +62,18 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                   onClick={() => setAddFriendModal(true)}
                   className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
-               Add Group!!
+               Add Group
                 </button>
                 {addFriendModal && (
                 <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
                  )}
             </div>
-            <div>
+            <div className="" >
                 <button
                   onClick={() => setAddFriendModal(true)}
                   className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
-               Create Group!!
+               Create Group
                 </button>
                 {addFriendModal && (
                 <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />

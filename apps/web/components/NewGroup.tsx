@@ -4,17 +4,11 @@ const NewGroup = ({ contacts, onClose, setSidebarContacts, setActiveUser, userDa
     const [username, setUserName] = useState("")
     const [formData, setForm] = useState({
         username: "",
-        email: "",
-        password:"",
-        confirmPassword: ""
+        email: ""
     })
     async function handleSubmit(e: any) {
         e.preventDefault();
         try{
-          if (formData.password !== formData.password) {
-            alert("Password doesn't match");
-            return;
-          }
         const response = await axios.post('http://localhost:3001/add-group', formData)
         if(!response.data.success) {
             alert("the group with this name ")
