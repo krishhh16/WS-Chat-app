@@ -190,10 +190,14 @@ app.post("/make-groups", validateUser, async (req, res) => {
     const groupExists = prisma.groups.findFirst({
       where: {
         name: groupName
+      },
+      select: {
+        name: true
       }
     })
 
     if (!groupExists) {
+      console.log('error adding the group coz it already exists')
       return res.json({success: false, msg: 'group already exists'})
     }
     
