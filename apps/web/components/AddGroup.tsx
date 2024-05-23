@@ -13,7 +13,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
       if (!username) {
         return
       }
-      const users = await axios.get('http://localhost:3001/get-user', {withCredentials: true, params: {query: username}})
+      const users = await axios.get('http://localhost:3001/get-groups', {withCredentials: true, params: {query: username}})
 
       if (!users.data.success){
         setResultText('Internal Server error')
@@ -21,7 +21,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         setResultText('Hmmmm.... No such user')
       } else {
         setResultText("Users:")
-        setUsers(users.data.users)
+        setUsers(users.data.groups)
       }
       setLoading(false)
       return
@@ -29,10 +29,10 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
-          <h2 className="text-2xl font-bold mb-4">Talk to your friend!</h2>
+          <h2 className="text-2xl font-bold mb-4">Join A Group!</h2>
           <div>
-        <label className={"block text-sm font-medium text-gray-700"}>Add user</label>
-        <input className={ "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none w-full focus:border-indigo-500"} value={username} placeholder={"Please enter your friend's username"} onChange={handleQuery} />
+        <label className={"block text-sm font-medium text-gray-700"}>Add Room</label>
+        <input className={ "p-2 border border-gray-300 rounded-md shadow-lg focus:outline-none w-full focus:border-indigo-500"} value={username} placeholder={"Please enter the Room's name to join the server"} onChange={handleQuery} />
         { isLoading &&
         <div className="flex items-center justify-center">
       <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-blue-500"></div>
@@ -42,18 +42,18 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
      {result && (
         <>
         <p className="text-gray-700 font-semibold">{result}</p>
-        <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
+        <p className="text-gray-700 font-semibold">{users?.length} Groups Found!</p>
         { 
-        users?.map((item: {username: string, userID: string}, i: number) => {
+        users?.map((item: {groupName: string, createdBy: string}, i: number) => {
           if (userData?.username === username) {
             return
-          }
+          }else{
           return (
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
-        setSidebarContacts([...contacts, {username: item.username, userId: item.userID}])
-        setActiveUser({username: item.username, userId: item.userID})
+        setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy}])
+        setActiveUser({username: item.groupName, userId: item.createdBy})
         console.log(contacts)
         setIsClicked(!isClicked)
         onClose();
@@ -61,9 +61,10 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
       
     }
     >
-      <p className="text-black font-semibold">{item.username}</p>
+     <p className="text-black font-semibold">{item.groupName}</p>
+      <p className="text-black font-light">By:- {item.createdBy}</p>
     </div>
-          )
+          )}
         })
         }
         </>

@@ -48,6 +48,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )   
           }) 
         }
+        <div className="justify-around flex" >
             <div className='mb-5'>
                 <button
                     onClick={() => setAddFriendModal(true)}
@@ -59,7 +60,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
           )}
                 </div>
-            <div>
+            <div className='mb-5'>
                 <button
                   onClick={() => setAddFriendModal2(true)}
                   className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
@@ -81,6 +82,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                 <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal3(false)} />
                  )}
             </div>
+        </div>
         </div>
       </div>
     );

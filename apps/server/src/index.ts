@@ -169,10 +169,10 @@ app.get("/get-groups", validateUser, async (req, res) => {
         ]
       }
     });
-    const users = user.map((item) => {
+    const groups = user.map((item) => {
       return { groupName: item.name, createdBy: item.authorId };
     });
-    res.json({ users, success: true });
+    res.json({ groups, success: true });
   } catch (err) {
     console.error(err);
     return res.send("Internal server error");
