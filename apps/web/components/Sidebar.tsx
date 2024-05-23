@@ -50,7 +50,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )   
           }) 
         }
-        <div className="justify-around flex" >
+        <div style={{display: 'grid', gridTemplateColumns: "30% 30% 30%", justifyContent: 'space-evenly'}} >
             <div className='mb-5'>
                 <button
                     onClick={() => setAddFriendModal(true)}
