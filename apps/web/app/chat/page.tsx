@@ -51,7 +51,7 @@ const GoingChat = () => {
         ?
         <>
         <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
-        {activeUser.isRoom ? <div></div> : <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> }
+        {activeUser.isRoom ? <GroupChatComponent setContacts={setContacts}  setActiveUser={setActiveUser} username={activeUser.username} /> : <ChatComponent setActiveUser={setActiveUser}   myUsername={isUser.myUsername} myUserId={isUser.myUserId} contacts={contacts} setContacts={setContacts}  username={activeUser.username}  userId={activeUser.userId} /> }
         </>
         :
         <>

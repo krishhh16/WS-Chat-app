@@ -180,33 +180,29 @@ app.get("/get-groups", validateUser, async (req, res) => {
 });
 
 app.post("/make-groups", validateUser, async (req, res) => {
-  const { groupName, bio } = req.body;
+  const { name, bio } = req.body;
 
-  if (!groupName || !bio) {
+  if (!name || !bio) {
     return res.json({success: false })
   }
 
   try{
     const groupExists = prisma.groups.findFirst({
       where: {
-        name: groupName
-      },
-      select: {
-        name: true
+        name
       }
     })
 
     if (!groupExists) {
-      console.log('error adding the group coz it already exists')
       return res.json({success: false, msg: 'group already exists'})
     }
     
     const authorId: string = await req.userDetails?.userID as string
     await prisma.groups.create({
       data: {
-        name: groupName,
-        authorId,
-        bio
+        name,
+        bio,
+        authorId
       }
     })
 
@@ -214,11 +210,11 @@ app.post("/make-groups", validateUser, async (req, res) => {
 
 
   }catch(err){ 
-    console.log(err)
     return res.json({success: false, msg: 'internal server error'})
   }
-
 });
+
+
 
 interface userObject {
   userId: string;
@@ -243,8 +239,10 @@ class Users {
   public addUser(userId: string, socketId: string): void {
     const existingUserIndex = this.user.findIndex(item => item.userId === userId);
     if (existingUserIndex !== -1) {
+      // Update socketId for the existing user
       this.user[existingUserIndex].socketId = socketId;
     } else {
+      // Add new user
       this.user.push({ userId, socketId });
     }
   }
@@ -269,14 +267,24 @@ io.on("connection", (socket) => {
     console.log(`Server Received userId ${userId} with the socket id ${socket.id}`);
   });
 
-  socket.on('joinRoom', (roomName: string) => {
-    socket.join(roomName);
-    console.log(`User joined room: ${roomName}`);
+  socket.on('join_room', (groupName) =>{
+    socket.join(groupName);
   });
 
-  socket.on("message", async ({ roomName, fromUserId, msg, fromUser }: { roomName: string; fromUserId: string; msg: string; fromUser: string }) => {
-    io.to(roomName).emit('room_message', { msg, fromUser, fromUserId });
-    console.log(`Sent message to room ${roomName} from user ${fromUserId}: ${msg}`);
+  socket.on("messageGroup", (msg, fromUser, groupName) => {
+    socket.to(groupName).emit("group_message", {msg, fromUser})
+  })
+
+  socket.on("message", async ({ fromUserId, msg, fromUser, toUserId }: { toUserId: string; fromUser: string; userId: string; msg: string; fromUserId: string }) => {
+    const socketId = users.findUser(toUserId);
+    if (socketId) {
+      io.to(socketId).emit('private_message', { msg, fromUser, fromUserId, toUserId });
+      console.log(`Sent message to ${toUserId} the message ${msg} with the socket id ${socketId}`);
+    } else {
+      console.log(`User ${toUserId} not found`);
+    }
+
+   
   });
 
   socket.on('disconnect', () => {

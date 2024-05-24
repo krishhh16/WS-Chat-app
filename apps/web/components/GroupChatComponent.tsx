@@ -18,7 +18,6 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
   const [text, setText] = useState<string>("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [selfData, setSelf] = useState<SelfData>({ myUsername: "", myUserId: "" });
-  const [roomName, setRoomName] = useState<string>("");
 
   const socketSetup = useCallback(async () => {
     const userData = await axios.get('http://localhost:3001/user', { withCredentials: true });
@@ -34,19 +33,13 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
-      newSocket.emit('initial_value', userData.data.userID);
+      newSocket.emit('join_room', username);
     });
 
-    newSocket.on("room_message", ({ msg, fromUser, fromUserId }: { msg: string; fromUser: string; fromUserId: string }) => {
-      console.log(`You've received a message ${msg} from User ${fromUser}`);
+    newSocket.on("group_message", ({ msg, fromUser }: { toUserId: string, msg: string; fromUser: string, fromUserId: string }) => {
+      console.log(`You've received a message ${msg} from Group ${username} from User ${fromUser} `);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
-      setContacts((prevContacts: { username: string; userId: string; }[]) => {
-        if (!prevContacts.some(contact => contact.userId === fromUserId)) {
-          return [...prevContacts, { username: fromUser, userId: fromUserId }];
-        }
-        return prevContacts;
-      });
-      setActiveUser({ username: fromUser, userId: fromUserId });
+     
     });
 
     return () => {
@@ -58,59 +51,35 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
     socketSetup();
   }, [socketSetup]);
 
-  const joinRoom = () => {
-    if (roomName.trim() === "") {
-      alert('Please enter a valid room name');
-      return;
-    }
-    socket?.emit('joinRoom', roomName);
-    console.log(`Joined room: ${roomName}`);
-  };
-
   const handleSubmit = async () => {
-    if (text.trim() === "" || roomName.trim() === "") return;
-
+    if (text.trim() === "") return;
     setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
-    const msgPayload = { roomName, fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername };
+    const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
     setText('');
     socket?.emit('message', msgPayload);
-    
     await axios.post('http://localhost:3001/messages', msgPayload, { withCredentials: true });
-  };
+    };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
+    <div className="flex justify-center items-center min-w-full min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
       <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
         <div key="chat-interface" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
-          {username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}
+          {
+          username
+          ?
+          `Start chatting with ${username} as ${selfData.myUsername}`
+          :
+          "Chat with your friends!!!"
+          }
         </div>
         <div className="flex-grow p-5 overflow-y-auto bg-gray-50">
-          {msgs.map((item, i) => (
+          {msgs
+          .map((item, i) =>
+          (
             <Message key={i} index={i} username={item.username} text={item.message} selfEnd={item.selfEnd} />
-          ))}
+          ))
+          }
         </div>
-        <form
-          className="p-5 bg-white flex items-center space-x-3 border-t"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <input
-            onChange={(e) => setRoomName(e.target.value)}
-            className="flex-grow px-4 py-2 rounded-full border outline-none focus:ring-2 focus:ring-blue-500 transition"
-            value={roomName}
-            type="text"
-            placeholder="Enter room name..."
-          />
-          <button
-            className="px-6 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
-            type="button"
-            onClick={joinRoom}
-          >
-            Join Room
-          </button>
-        </form>
         <form
           className="p-5 bg-white flex items-center space-x-3 border-t"
           onSubmit={(e) => {
@@ -124,12 +93,12 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
             value={text}
             type="text"
             placeholder={!username ? "Select a chat to get started" : "Type your message here..."}
-            disabled={!username || roomName.trim() === ""}
+            disabled={!username}
           />
           <button
-            className={`px-6 py-2 rounded-full ${username && roomName.trim() !== "" ? "bg-blue-500" : "bg-red-500"} text-white font-semibold hover:bg-blue-600 transition`}
+            className={`px-6 py-2 rounded-full ${username ? "bg-blue-500" : "bg-red-500"} text-white font-semibold hover:bg-blue-600 transition`}
             type="submit"
-            disabled={!username || roomName.trim() === ""}
+            disabled={!username}
           >
             Send
           </button>
