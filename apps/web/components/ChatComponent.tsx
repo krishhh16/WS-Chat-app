@@ -112,7 +112,7 @@ const Message = ({ index, username, text, selfEnd }: { index: number; username: 
   const bgClass = selfEnd ? 'bg-gray-300 text-gray-800' : 'bg-blue-500 text-white';
 
   return (
-    <div className={`mt-2 p-3 rounded-lg max-w-md ${alignment} ${bgClass}`}>
+    <div key={index} className={`mt-2 p-3 rounded-lg max-w-md ${alignment} ${bgClass}`}>
       <div className="text-xs text-gray-500 mb-1">{username}</div>
       <div>{text}</div>
     </div>

@@ -5,7 +5,7 @@ import Sidebar from '../../components/Sidebar';
 import ChatComponent from '../../components/ChatComponent';
 import axios from 'axios';
 import Unauthorized from '../../components/unauthorized';
-import { Tulpen_One } from 'next/font/google';
+import GroupChatComponent from '../../components/GroupChatComponent';
 
 interface SelfData{
   myUsername: string;

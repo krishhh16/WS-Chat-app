@@ -13,11 +13,12 @@ interface SelfData {
   myUserId: string;
 }
 
-function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
+function GroupChatComponent({ username, userId, setActiveUser, setContacts }: any) {
   const [msgs, setMsgs] = useState<MsgType[]>([]);
   const [text, setText] = useState<string>("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [selfData, setSelf] = useState<SelfData>({ myUsername: "", myUserId: "" });
+  const [roomName, setRoomName] = useState<string>("");
 
   const socketSetup = useCallback(async () => {
     const userData = await axios.get('http://localhost:3001/user', { withCredentials: true });
@@ -36,7 +37,7 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
       newSocket.emit('initial_value', userData.data.userID);
     });
 
-    newSocket.on("private_message", ({ msg, fromUser, fromUserId, toUserId }: { toUserId: string, msg: string; fromUser: string, fromUserId: string }) => {
+    newSocket.on("room_message", ({ msg, fromUser, fromUserId }: { msg: string; fromUser: string; fromUserId: string }) => {
       console.log(`You've received a message ${msg} from User ${fromUser}`);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
       setContacts((prevContacts: { username: string; userId: string; }[]) => {
@@ -57,11 +58,20 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     socketSetup();
   }, [socketSetup]);
 
+  const joinRoom = () => {
+    if (roomName.trim() === "") {
+      alert('Please enter a valid room name');
+      return;
+    }
+    socket?.emit('joinRoom', roomName);
+    console.log(`Joined room: ${roomName}`);
+  };
+
   const handleSubmit = async () => {
-    if (text.trim() === "") return;
+    if (text.trim() === "" || roomName.trim() === "") return;
 
     setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
-    const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
+    const msgPayload = { roomName, fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername };
     setText('');
     socket?.emit('message', msgPayload);
     
@@ -87,17 +97,39 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
           }}
         >
           <input
+            onChange={(e) => setRoomName(e.target.value)}
+            className="flex-grow px-4 py-2 rounded-full border outline-none focus:ring-2 focus:ring-blue-500 transition"
+            value={roomName}
+            type="text"
+            placeholder="Enter room name..."
+          />
+          <button
+            className="px-6 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+            type="button"
+            onClick={joinRoom}
+          >
+            Join Room
+          </button>
+        </form>
+        <form
+          className="p-5 bg-white flex items-center space-x-3 border-t"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
+          <input
             onChange={(e) => setText(e.target.value)}
             className="flex-grow px-4 py-2 rounded-full border outline-none focus:ring-2 focus:ring-blue-500 transition"
             value={text}
             type="text"
             placeholder={!username ? "Select a chat to get started" : "Type your message here..."}
-            disabled={!username}
+            disabled={!username || roomName.trim() === ""}
           />
           <button
-            className={`px-6 py-2 rounded-full ${username ? "bg-blue-500" : "bg-red-500"} text-white font-semibold hover:bg-blue-600 transition`}
+            className={`px-6 py-2 rounded-full ${username && roomName.trim() !== "" ? "bg-blue-500" : "bg-red-500"} text-white font-semibold hover:bg-blue-600 transition`}
             type="submit"
-            disabled={!username}
+            disabled={!username || roomName.trim() === ""}
           >
             Send
           </button>
@@ -112,11 +144,11 @@ const Message = ({ index, username, text, selfEnd }: { index: number; username: 
   const bgClass = selfEnd ? 'bg-gray-300 text-gray-800' : 'bg-blue-500 text-white';
 
   return (
-    <div className={`mt-2 p-3 rounded-lg max-w-md ${alignment} ${bgClass}`}>
+    <div key={index} className={`mt-2 p-3 rounded-lg max-w-md ${alignment} ${bgClass}`}>
       <div className="text-xs text-gray-500 mb-1">{username}</div>
       <div>{text}</div>
     </div>
   );
 };
 
-export default ChatComponent;
+export default GroupChatComponent;

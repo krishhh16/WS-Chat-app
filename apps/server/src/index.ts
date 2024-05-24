@@ -220,8 +220,6 @@ app.post("/make-groups", validateUser, async (req, res) => {
 
 });
 
-
-
 interface userObject {
   userId: string;
   socketId: string;
@@ -245,10 +243,8 @@ class Users {
   public addUser(userId: string, socketId: string): void {
     const existingUserIndex = this.user.findIndex(item => item.userId === userId);
     if (existingUserIndex !== -1) {
-      // Update socketId for the existing user
       this.user[existingUserIndex].socketId = socketId;
     } else {
-      // Add new user
       this.user.push({ userId, socketId });
     }
   }
@@ -273,16 +269,14 @@ io.on("connection", (socket) => {
     console.log(`Server Received userId ${userId} with the socket id ${socket.id}`);
   });
 
-  socket.on("message", async ({ fromUserId, msg, fromUser, toUserId }: { toUserId: string; fromUser: string; userId: string; msg: string; fromUserId: string }) => {
-    const socketId = users.findUser(toUserId);
-    if (socketId) {
-      io.to(socketId).emit('private_message', { msg, fromUser, fromUserId, toUserId });
-      console.log(`Sent message to ${toUserId} the message ${msg} with the socket id ${socketId}`);
-    } else {
-      console.log(`User ${toUserId} not found`);
-    }
+  socket.on('joinRoom', (roomName: string) => {
+    socket.join(roomName);
+    console.log(`User joined room: ${roomName}`);
+  });
 
-   
+  socket.on("message", async ({ roomName, fromUserId, msg, fromUser }: { roomName: string; fromUserId: string; msg: string; fromUser: string }) => {
+    io.to(roomName).emit('room_message', { msg, fromUser, fromUserId });
+    console.log(`Sent message to room ${roomName} from user ${fromUserId}: ${msg}`);
   });
 
   socket.on('disconnect', () => {
