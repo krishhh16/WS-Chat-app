@@ -268,11 +268,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on('join_room', (groupName) =>{
+    console.log(`Joined group name ${groupName}`)
     socket.join(groupName);
   });
 
-  socket.on("messageGroup", (msg, fromUser, groupName) => {
-    socket.to(groupName).emit("group_message", {msg, fromUser})
+  socket.on("messageGroup", ({msg, fromUser, groupName}) => {
+    console.log(`sending message to group ${groupName} as user ${fromUser}`)
+    socket.to(groupName).emit("group_message", {msg, fromUser, groupName})
   })
 
   socket.on("message", async ({ fromUserId, msg, fromUser, toUserId }: { toUserId: string; fromUser: string; userId: string; msg: string; fromUserId: string }) => {

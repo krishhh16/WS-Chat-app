@@ -36,11 +36,12 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
       newSocket.emit('join_room', username);
     });
 
-    newSocket.on("group_message", ({ msg, fromUser }: { toUserId: string, msg: string; fromUser: string, fromUserId: string }) => {
+    newSocket.on("group_message", ({ msg, fromUser, groupName }: { msg: string; fromUser: string,groupName: string }) => {
       console.log(`You've received a message ${msg} from Group ${username} from User ${fromUser} `);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
-     
     });
+
+
 
     return () => {
       newSocket.disconnect();
@@ -54,10 +55,9 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
   const handleSubmit = async () => {
     if (text.trim() === "") return;
     setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
-    const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
+    const msgPayload = { msg: text, fromUser: selfData.myUsername, groupName: username};
     setText('');
-    socket?.emit('message', msgPayload);
-    await axios.post('http://localhost:3001/messages', msgPayload, { withCredentials: true });
+    socket?.emit('messageGroup', msgPayload);
     };
 
   return (
@@ -67,7 +67,7 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
           {
           username
           ?
-          `Start chatting with ${username} as ${selfData.myUsername}`
+          `Start chatting on Group ${username} as ${selfData.myUsername}`
           :
           "Chat with your friends!!!"
           }
