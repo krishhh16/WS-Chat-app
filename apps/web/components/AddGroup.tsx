@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
+import { AddFriendProps as AddGroupProps } from "./AddFriend";
+
+const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }: AddGroupProps) => {
     const [username, setUserName] = useState("")
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
@@ -44,16 +46,16 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         <p className="text-gray-700 font-semibold">{users?.length} Groups Found!</p>
         { 
         users?.map((item: {groupName: string, createdBy: string}, i: number) => {
-          if (userData?.username === username) {
+          if (userData.myUsername === username) {
             return
           }else{
           return (
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{
-        setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy, isRoom: true}])
-        setActiveUser({username: item.groupName, userId: item.createdBy, isRoom: true})
-        onClose();
+              setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy, isRoom: true}])
+              setActiveUser({username: item.groupName, userId: item.createdBy, isRoom: true})
+              onClose(false);
       }
       
     }
@@ -71,7 +73,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
           <button
             onClick={() => {
               // setActiveUser({username: item.username, userId: item.userId})
-              onClose()
+              onClose(false)
             }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
           >

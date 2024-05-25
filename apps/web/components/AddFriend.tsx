@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { userType } from "../app/chat/page";
 import { SelfData } from "../app/chat/page";
-interface AddFriendProps {
+export interface AddFriendProps {
   contacts: userType[],
   onClose: React.Dispatch<React.SetStateAction<boolean>>,
   setSidebarContacts: React.Dispatch<React.SetStateAction<userType[]>>
@@ -54,7 +54,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         <p className="text-gray-700 font-semibold">{result}</p>
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
-        users?.map((item: {username: string, userID: string}, i: number) => {
+        users.map((item: {username: string, userID: string}, i: number) => {
           if (userData.myUsername === item.username) {
             return 
           } else{
@@ -63,17 +63,16 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
                  setSidebarContacts((prevContacts: { username: string; userId: string; isRoom: boolean }[]) => {
-                  if (!prevContacts.some(contact => contact.userId === item.username)) {
+                  if (!prevContacts.some(contact => contact.username === item.username)) {
                     return [...prevContacts, { username: item.username, userId: item.userID, isRoom: false }];
                   }else{
-                  return [...prevContacts];
+                    return [...prevContacts];
                 }});
                   setActiveUser({username: item.username, userId: item.userID, isRoom: false})
                   console.log(contacts)
-                setIsClicked(!isClicked)
-                onClose(false);
-      }
-      
+                  setIsClicked(!isClicked)
+                  onClose(false);
+            }
     }
     >
       <p className="text-black font-semibold">{item.username}</p>
@@ -87,7 +86,6 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         </div>
           <button
             onClick={() => {
-              // setActiveUser({username: item.username, userId: item.userId})
               onClose(false)
             }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
@@ -100,4 +98,3 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
   };
   
   export default AddFriend;
-  

@@ -43,8 +43,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             </div>
             )   
           }) 
-        }
-{       contacts.length == 0  &&
+       }
         <div className="flex overflow-hidden gap-2" >
             <div className=''>
                 <button
@@ -65,7 +64,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                Add Group
                 </button>
                 {addFriendModal2 && (
-                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal2(false)} />
+                <AddGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={setAddFriendModal2} />
                  )}
             </div>
             <div className="" >
@@ -76,11 +75,10 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                Create Group
                 </button>
                 {addFriendModal3 && (
-                <NewGroup setSidebarContacts={setContacts} setActiveUser={setActiveUser}  onClose={() => setAddFriendModal3(false)} />
+                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={setAddFriendModal2} />
                  )}
             </div>
         </div>
-        }
         </div>
       </div>
     );

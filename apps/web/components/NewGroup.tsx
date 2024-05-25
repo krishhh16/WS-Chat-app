@@ -1,11 +1,12 @@
-
 import axios from "axios";
 import React, { useState } from "react";
-const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: {onClose: React.Dispatch<React.SetStateAction<boolean>>, setSidebarContacts: React.Dispatch<React.SetStateAction<{username: string; userId: string; isRoom: boolean}[]>>, setActiveUser: React.Dispatch<React.SetStateAction<{username: string; userId: string; isRoom: boolean}>>}) => {
+import { AddFriendProps as NewGroupProps } from "./AddFriend";
+
+const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: NewGroupProps) => {
     const [formData, setForm] = useState({
         groupName: "",
         bio: ""
-    }) 
+    })
     async function handleSubmit(e: any) {
         e.preventDefault();
         try{
@@ -18,10 +19,10 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: {onClose: Reac
             const res = await axios.get('http://localhost:3001/user', {withCredentials: true})
             setSidebarContacts(prevVal => [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }] )
             setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true})
-            onClose(false); 
+            onClose(false);
         }
-    }catch (err){   
-
+    }catch (err: any){   
+      alert(err.message)
     }
     }
     const inputLabel = "block text-sm font-medium text-gray-700"
@@ -29,10 +30,9 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: {onClose: Reac
     
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
         <div className="max-w-md mx-auto bg-white shadow-2xl rounded-lg p-6" >
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Add Group</h1>
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <div>
             <label className={inputLabel}>Group Name</label>
             <input className={inputClassName} value={formData.groupName} placeholder='Please enter your username' onChange={(e) => {setForm({...formData, groupName: e.target.value})}} />
@@ -45,15 +45,16 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: {onClose: Reac
         <button  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out" >Submit</button>
         </div>
       </form>
-    </div>
+      <div className="flex justify-center items-center">
     <button
-            onClick={() => {
-              onClose(false)
-            }}
-            className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
-          >
-            Close
+        onClick={() => {
+        onClose(false)
+        }}
+        className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+    >
+        Close
     </button>
+    </div>
     </div>
       </div>
     );
