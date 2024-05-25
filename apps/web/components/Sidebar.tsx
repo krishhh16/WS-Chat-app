@@ -5,15 +5,11 @@ import React, { useState } from 'react';
 import AddFriend from './AddFriend';
 import AddGroup from './AddGroup';
 import NewGroup from './NewGroup';
-interface userType {
-  username: string;
-  userId: string, 
-  isRoom: boolean
-}
+import { userType } from '../app/chat/page';
 
 interface SidebarPropType {
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
-  setContacts: React.Dispatch<React.SetStateAction<userType>>;
+  setContacts: React.Dispatch<React.SetStateAction<userTyp[]>>;
   contacts: userType[];
   userData: {myUsername: string,myUserId: string}
   setIsRoom: React.Dispatch<React.SetStateAction<boolean>>
@@ -26,7 +22,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
  
     return (
       <div className="w-1/3 h-screen bg-white border-r shadow-lg">
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
+        <div className=" bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
           Contacts
         </div>
         <h1 className="bg-gray-100 flex items-center justify-center">
@@ -50,6 +46,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )   
           }) 
         }
+{       contacts.length == 0  &&
         <div  className="flex overflow-hidden gap-2" >
             <div className=''>
                 <button
@@ -85,6 +82,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                  )}
             </div>
         </div>
+        }
         </div>
       </div>
     );

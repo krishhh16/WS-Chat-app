@@ -1,6 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
-const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }) => {
+import React, { useState } from "react";
+import { userType } from "../app/chat/page";
+import { SelfData } from "../app/chat/page";
+interface AddFriendProps {
+  contacts: userType[],
+  onClose: React.Dispatch<React.SetStateAction<boolean>>,
+  setSidebarContacts: React.Dispatch<React.SetStateAction<userType[]>>
+  setActiveUser: React.Dispatch<React.SetStateAction<userType>>,
+  userData: SelfData,
+}
+const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }: AddFriendProps) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
     const [result, setResultText] = useState("")
@@ -39,33 +48,30 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
     </div>
      }
         <div className={`${result && "p-4 bg-gray-100 border border-gray-300 rounded-md shadow-md"}`}>
-     {result && (
+     {
+     result && (
         <>
         <p className="text-gray-700 font-semibold">{result}</p>
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users?.map((item: {username: string, userID: string}, i: number) => {
-          if (userData?.username === item.username) {
-            return (
-              <div>
-
-              </div>
-            )
+          if (userData.myUsername === item.username) {
+            return 
           } else{
           return (
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
-                setSidebarContacts((prevContacts: { username: string; userId: string; isRoom: boolean }[]) => {
+                 setSidebarContacts((prevContacts: { username: string; userId: string; isRoom: boolean }[]) => {
                   if (!prevContacts.some(contact => contact.userId === item.username)) {
                     return [...prevContacts, { username: item.username, userId: item.userID, isRoom: false }];
-                  }
-                  return prevContacts;
-                });
-        setActiveUser({username: item.username, userId: item.userID})
-        console.log(contacts)
-        setIsClicked(!isClicked)
-        onClose();
+                  }else{
+                  return [...prevContacts];
+                }});
+                  setActiveUser({username: item.username, userId: item.userID})
+                  console.log(contacts)
+                setIsClicked(!isClicked)
+        onClose(trieue);
       }
       
     }

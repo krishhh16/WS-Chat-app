@@ -285,8 +285,6 @@ io.on("connection", (socket) => {
     } else {
       console.log(`User ${toUserId} not found`);
     }
-
-   
   });
 
   socket.on('disconnect', () => {

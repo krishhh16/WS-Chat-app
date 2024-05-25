@@ -7,23 +7,23 @@ import axios from 'axios';
 import Unauthorized from '../../components/unauthorized';
 import GroupChatComponent from '../../components/GroupChatComponent';
 
-interface SelfData{
+export interface SelfData{
   myUsername: string;
   myUserId: string;
 }
-interface userType {
+export interface userType {
   username: string;
   userId: string
   isRoom: boolean
 }
 const GoingChat = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isUser, setIsUser] = useState<SelfData>({
     myUsername: "",
     myUserId: "",
   })
   const [contacts, setContacts] = useState<userType[]>([])
-  const [activeUser, setActiveUser] = useState({
+  const [activeUser, setActiveUser] = useState<userType>({
     username: "",
     userId: "",
     isRoom: false,
@@ -40,14 +40,14 @@ const GoingChat = () => {
       return
     }else {
       setIsUser({myUsername: user.data.username, myUserId: user.data.userID})
-      setIsLoggedIn(true)
+      setIsLoading(!isLoading)
     }
   }
 
   return (
     <div className="flex">
       {
-        isLoggedIn 
+        ( !isLoading )
         ?
         <>
         <Sidebar setActiveUser={setActiveUser} userData={isUser}  contacts={contacts} setContacts={setContacts} />
