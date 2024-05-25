@@ -1,7 +1,7 @@
 'use client'
 
 // Sidebar.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AddFriend from './AddFriend';
 import AddGroup from './AddGroup';
 import NewGroup from './NewGroup';
@@ -18,7 +18,13 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
     const [addFriendModal, setAddFriendModal] = useState(false);
     const [addFriendModal2, setAddFriendModal2] = useState(false);
     const [addFriendModal3, setAddFriendModal3] = useState(false);
- 
+
+    useEffect(() => {
+      (async () => {
+        
+      })()
+    }, [])
+
     return (
       <div className="w-1/3  sm:w-1/2 h-screen bg-white border-r shadow-lg">
         <div className=" bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
@@ -75,7 +81,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                Create Group
                 </button>
                 {addFriendModal3 && (
-                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={setAddFriendModal2} />
+                <NewGroup userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={setAddFriendModal3} />
                  )}
             </div>
         </div>

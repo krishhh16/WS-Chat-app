@@ -231,9 +231,10 @@ app.post("/add-chat", validateUser,async (req, res) => {
      followUserId: userId
     }
   })
-
+  
   return res.json({success: true})
  } catch(err){
+  console.log(err)
    return res.json({success: false, msg: 'internal server error'})
  }
 })

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { AddFriendProps as NewGroupProps } from "./AddFriend";
 
-const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: NewGroupProps) => {
+const NewGroup = ({ onClose, setSidebarContacts, setActiveUser, userData }: NewGroupProps) => {
     const [formData, setForm] = useState({
         groupName: "",
         bio: ""
@@ -17,8 +17,25 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: NewGroupProps)
         }else {
             alert("Group created successfully!")
             const res = await axios.get('http://localhost:3001/user', {withCredentials: true})
-            setSidebarContacts(prevVal =>{
-              
+            setSidebarContacts((prevVal) =>{
+              (async () => {
+                try{
+                const response = await axios.post("http://localhost:3001/add-chat", {
+                username: formData.groupName,
+                userId: userData.myUserId,
+                isRoom: true
+              }, {withCredentials: true})
+               if (!response.data.success){
+                alert("Unable to Join the server")
+                return
+               } else{
+                alert(`Successfully created the server ${formData.groupName}` )
+                onClose(true)
+               }} catch(err) {
+                alert("Internal server issues")
+                return
+               }
+              })()
               return [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }]
               })
             setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true})
