@@ -17,11 +17,14 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser }: NewGroupProps)
         }else {
             alert("Group created successfully!")
             const res = await axios.get('http://localhost:3001/user', {withCredentials: true})
-            setSidebarContacts(prevVal => [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }] )
+            setSidebarContacts(prevVal =>{
+              
+              return [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }]
+              })
             setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true})
             onClose(false);
         }
-    }catch (err: any){   
+    }catch (err: any){
       alert(err.message)
     }
     }

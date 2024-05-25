@@ -211,6 +211,33 @@ app.post("/make-groups", validateUser, async (req, res) => {
   }
 });
 
+app.post("/add-chat", validateUser,async (req, res) => {
+  const {username, userId, isRoom}: 
+  { 
+    username: string,
+    userId: string,
+    isRoom: boolean,
+  } = req.body;
+
+  if(!username || !userId ){
+    return res.json({success: false, msg: "please provide content to store the data"})
+  }
+  try{
+  await prisma.userDetails.create({
+    data: {
+     isRoom,
+     userId: req.userDetails?.userID as string,
+     username,
+     followUserId: userId
+    }
+  })
+
+  return res.json({success: true})
+ } catch(err){
+   return res.json({success: false, msg: 'internal server error'})
+ }
+})
+
 
 
 interface userObject {

@@ -21,7 +21,8 @@ model UserDetails {
   username  String
   userId    String
   isRoom    Boolean
-  userRel   User @relation(fields: [userId], references: [userID])
+  followUserId String
+  userRel   User @relation(fields: [followUserId], references: [userID])
 }
 
 model Message {
