@@ -9,19 +9,18 @@ import { userType } from '../app/chat/page';
 
 interface SidebarPropType {
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
-  setContacts: React.Dispatch<React.SetStateAction<userTyp[]>>;
+  setContacts: React.Dispatch<React.SetStateAction<userType[]>>;
   contacts: userType[];
   userData: {myUsername: string,myUserId: string}
-  setIsRoom: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropType) => {
-  const [addFriendModal, setAddFriendModal] = useState(false);
-  const [addFriendModal2, setAddFriendModal2] = useState(false);
-  const [addFriendModal3, setAddFriendModal3] = useState(false);
+    const [addFriendModal, setAddFriendModal] = useState(false);
+    const [addFriendModal2, setAddFriendModal2] = useState(false);
+    const [addFriendModal3, setAddFriendModal3] = useState(false);
  
     return (
-      <div className="w-1/3 h-screen bg-white border-r shadow-lg">
+      <div className="w-1/3  sm:w-1/2 h-screen bg-white border-r shadow-lg">
         <div className=" bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
           Contacts
         </div>
@@ -42,12 +41,11 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                 </div>
               </div>
             </div>
-            
             )   
           }) 
         }
 {       contacts.length == 0  &&
-        <div  className="flex overflow-hidden gap-2" >
+        <div className="flex overflow-hidden gap-2" >
             <div className=''>
                 <button
                     onClick={() => setAddFriendModal(true)}
@@ -56,7 +54,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                   Add Friend
                 </button>
           {addFriendModal && (
-            <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={() => setAddFriendModal(false)} />
+            <AddFriend userData={userData} contacts={contacts} setSidebarContacts={setContacts} setActiveUser={setActiveUser} onClose={setAddFriendModal} />
           )}
                 </div>
             <div className='mb-5'>

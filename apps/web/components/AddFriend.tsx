@@ -68,10 +68,10 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                   }else{
                   return [...prevContacts];
                 }});
-                  setActiveUser({username: item.username, userId: item.userID})
+                  setActiveUser({username: item.username, userId: item.userID, isRoom: false})
                   console.log(contacts)
                 setIsClicked(!isClicked)
-        onClose(trieue);
+                onClose(false);
       }
       
     }
@@ -88,7 +88,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
           <button
             onClick={() => {
               // setActiveUser({username: item.username, userId: item.userId})
-              onClose()
+              onClose(false)
             }}
             className="px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
           >
