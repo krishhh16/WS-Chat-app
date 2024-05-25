@@ -41,8 +41,6 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
     });
 
-
-
     return () => {
       newSocket.disconnect();
     };

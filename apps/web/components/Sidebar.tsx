@@ -50,11 +50,11 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )   
           }) 
         }
-        <div style={{display: 'grid', gridTemplateColumns: "30% 30% 30%", justifyContent: 'space-evenly'}} >
-            <div className='mb-5'>
+        <div  className="flex overflow-hidden gap-2" >
+            <div className=''>
                 <button
                     onClick={() => setAddFriendModal(true)}
-                    className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                    className="px-4 py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                   Add Friend
                 </button>
@@ -65,7 +65,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             <div className='mb-5'>
                 <button
                   onClick={() => setAddFriendModal2(true)}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                  className="px-4 py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Add Group
                 </button>
@@ -76,7 +76,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             <div className="" >
                 <button
                   onClick={() => setAddFriendModal3(true)}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                  className="px-4 py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Create Group
                 </button>
