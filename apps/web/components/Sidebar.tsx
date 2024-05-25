@@ -6,6 +6,7 @@ import AddFriend from './AddFriend';
 import AddGroup from './AddGroup';
 import NewGroup from './NewGroup';
 import { userType } from '../app/chat/page';
+import axios from 'axios';
 
 interface SidebarPropType {
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
@@ -21,12 +22,29 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
 
     useEffect(() => {
       (async () => {
-        
+        const chats = await axios.get('http://localhost:3001/get-chats', {withCredentials: true})
+        if (!chats.data.success){
+          alert('unable to fetch user data')
+        }else {
+          console.log(chats.data);
+          chats.data.chats.map(({username, userId, isRoom}: {username: string, userId: string, isRoom}) => {
+            setContacts((prevData) =>{ 
+            if (!prevData?.some(contact => contact.username === username)){
+              return [...prevData, {username, userId, isRoom}]
+            } else {
+              return [...prevData]
+            }
+          
+          })
+
+          })
+
+        }
       })()
     }, [])
 
     return (
-      <div className="w-1/3  sm:w-1/2 h-screen bg-white border-r shadow-lg">
+      <div className="w-1/3 sm:w-1/2 h-screen bg-white border-r shadow-lg">
         <div className=" bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
           Contacts
         </div>

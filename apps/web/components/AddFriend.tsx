@@ -54,28 +54,44 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         <p className="text-gray-700 font-semibold">{result}</p>
         <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
-        users.map((item: {username: string, userID: string}, i: number) => {
-          if (userData.myUsername === item.username) {
+        users.map(({username, userID}: {username: string, userID: string}, i: number) => {
+          if (userData.myUsername === username) {
             return 
           } else{
+
           return (
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{ 
-                 setSidebarContacts((prevContacts: { username: string; userId: string; isRoom: boolean }[]) => {
-                  if (!prevContacts.some(contact => contact.username === item.username)) {
-                    return [...prevContacts, { username: item.username, userId: item.userID, isRoom: false }];
-                  }else{
-                    return [...prevContacts];
-                }});
-                  setActiveUser({username: item.username, userId: item.userID, isRoom: false})
+                setSidebarContacts((prevVal) =>{
+                  (async () => {
+                    try{
+                    const response = await axios.post("http://localhost:3001/add-chat", {
+                    username: username,
+                    userId: userData.myUserId,
+                    isRoom: false
+                  }, {withCredentials: true})
+                   if (!response.data.success){
+                    alert("Unable to Join the server")
+                    return
+                   } else{
+                    alert(`Successfully created the server ${username}` )
+                    onClose(true)
+                   }} catch(err) {
+                    alert("Internal server issues")
+                    return
+                   }
+                  })()
+                  return [...prevVal, {username, userId: userID, isRoom: true }]
+                  })
+                  setActiveUser({username: username, userId: userID, isRoom: false})
                   console.log(contacts)
                   setIsClicked(!isClicked)
                   onClose(false);
             }
     }
     >
-      <p className="text-black font-semibold">{item.username}</p>
+      <p className="text-black font-semibold">{username}</p>
     </div>
           )}
         })
