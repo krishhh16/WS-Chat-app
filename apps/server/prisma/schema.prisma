@@ -13,6 +13,15 @@ model User {
   password String
   sentMessages   Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  chatUsers UserDetails[]
+}
+
+model UserDetails {
+  id        String @id @default(uuid())
+  username  String
+  userId    String
+  isRoom    Boolean
+  userRel   User @relation(fields: [userId], references: [userID])
 }
 
 model Message {
