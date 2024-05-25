@@ -231,14 +231,27 @@ app.post("/add-chat", validateUser,async (req, res) => {
      followUserId: userId
     }
   })
-  
+
   return res.json({success: true})
- } catch(err){
+   } catch(err){
   console.log(err)
    return res.json({success: false, msg: 'internal server error'})
  }
 })
 
+
+app.get('/get-chats', validateUser, async (req, res) => {
+  try {
+  const chats = await prisma.userDetails.findMany({
+    where: {userId: req.userDetails?.userID as string}
+  })
+
+  return res.json({success: true, chats})
+} catch(err){
+  console.log(err)
+  return res.json({success: false})
+}
+})
 
 
 interface userObject {
