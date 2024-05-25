@@ -169,6 +169,9 @@ app.get("/get-groups", validateUser, async (req, res) => {
         ]
       }
     });
+
+    
+
     const groups = user.map((item) => {
       return { groupName: item.name, createdBy: item.authorId };
     });

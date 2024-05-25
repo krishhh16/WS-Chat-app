@@ -45,7 +45,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
         <p className="text-gray-700 font-semibold">{result}</p>
         <p className="text-gray-700 font-semibold">{users?.length} Groups Found!</p>
         { 
-        users?.map((item: {groupName: string, createdBy: string}, i: number) => {
+        users?.map(({groupName, createdBy}: {groupName: string, createdBy: string}, i: number) => {
           if (userData.myUsername === username) {
             return
           }else{
@@ -53,15 +53,15 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{
-              setSidebarContacts([...contacts, {username: item.groupName, userId: item.createdBy, isRoom: true}])
-              setActiveUser({username: item.groupName, userId: item.createdBy, isRoom: true})
+              setSidebarContacts([...contacts, {username: groupName, userId: createdBy, isRoom: true}])
+              setActiveUser({username: groupName, userId: createdBy, isRoom: true})
               onClose(false);
       }
       
     }
     >
-     <p className="text-black font-semibold">{item.groupName}</p>
-      <p className="text-black font-light">By:- {item.createdBy}</p>
+     <p className="text-black font-semibold">{groupName}</p>
+      <p className="text-black font-light">By:- {createdBy}</p>
     </div>
           )}
         })

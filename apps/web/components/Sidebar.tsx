@@ -27,14 +27,13 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           alert('unable to fetch user data')
         }else {
           console.log(chats.data);
-          chats.data.chats.map(({username, userId, isRoom}: {username: string, userId: string, isRoom}) => {
+          chats.data.chats.map(({username, userId, isRoom}: {username: string, userId: string, isRoom: boolean}) => {
             setContacts((prevData) =>{ 
             if (!prevData?.some(contact => contact.username === username)){
               return [...prevData, {username, userId, isRoom}]
             } else {
               return [...prevData]
             }
-          
           })
 
           })
