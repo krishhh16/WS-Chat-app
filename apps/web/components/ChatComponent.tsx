@@ -62,6 +62,7 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
 
     setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
     const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
+    console.log(msgPayload)
     setText('');
     socket?.emit('message', msgPayload);
   };

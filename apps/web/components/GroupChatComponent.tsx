@@ -61,7 +61,7 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
       <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
-        <div key="chat-interface" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
+        <div key="chat-interface" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
           {
           username
           ?

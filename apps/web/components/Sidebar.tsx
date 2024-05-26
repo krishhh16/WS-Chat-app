@@ -27,10 +27,10 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           alert('unable to fetch user data')
         }else{
           console.log(chats.data);
-          chats.data.chats.map(({username, userId, isRoom}: {username: string, userId: string, isRoom: boolean}) => {
+          chats.data.chats.map(({username, followUserId, isRoom}: {username: string, followUserId: string, isRoom: boolean}) => {
             setContacts((prevData) =>{ 
             if (!prevData?.some(contact => contact.username === username)){
-              return [...prevData, {username, userId, isRoom}]
+              return [...prevData, {username, userId: followUserId, isRoom}]
             } else {
               return [...prevData]
             }
@@ -52,7 +52,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           {contacts?.map((item, i) => {
             return (
               <div
-              onClick={() => setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom })} 
+              onClick={() => {console.log(item); setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom })}} 
               key={i} 
               className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
             >
@@ -65,11 +65,11 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             )
           }) 
        }
-        <div className="flex  w-[100%]" >
+        <div className="flex justify-evenly w-[100%]" >
             <div className=''>
                 <button
                     onClick={() => setAddFriendModal(true)}
-                    className="z-0 py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                    className="z-0 px-1 py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                   Add Friend
                 </button>
@@ -80,7 +80,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             <div className='mb-5'>
                 <button
                   onClick={() => setAddFriendModal2(true)}
-                  className="py-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                  className="py-1 px-1 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Add Group
                 </button>
@@ -91,7 +91,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             <div className="" >
                 <button
                   onClick={() => setAddFriendModal3(true)}
-                  className="py-1 z-0 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
+                  className="py-1 px-1 z-0 text-sm bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out"
                 >
                Create Group
                 </button>

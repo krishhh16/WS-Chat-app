@@ -36,7 +36,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
       return
     }
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="fixed z-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
           <h2 className="text-2xl font-bold mb-4">Talk to your friend!</h2>
           <div>
@@ -68,7 +68,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                     try{
                     const response = await axios.post("http://localhost:3001/add-chat", {
                     username: username,
-                    userId: userData.myUserId,
+                    userId: userID,
                     isRoom: false
                   }, {withCredentials: true})
                    if (!response.data.success){
@@ -82,7 +82,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                    }
                   })()
                   if (!prevVal?.some((item) => item.username === username)){
-                  return [...prevVal, {username, userId: userID, isRoom: true }]}
+                  return [...prevVal, {username, userId: userID, isRoom: false }]}
                   else {
                     alert('user already in your friend list')
                    return [...prevVal]
@@ -96,6 +96,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
     }
     >
       <p className="text-black font-semibold">{username}</p>
+      <p className="text-black font-semibold">User ID: {userID}</p>
     </div>
           )}
         })
