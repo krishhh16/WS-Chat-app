@@ -170,8 +170,6 @@ app.get("/get-groups", validateUser, async (req, res) => {
       }
     });
 
-    
-
     const groups = user.map((item) => {
       return { groupName: item.name, createdBy: item.authorId };
     });
@@ -249,6 +247,50 @@ app.post("/add-chat", validateUser,async (req, res) => {
  }
 })
 
+app.post('/post-message', validateUser, async (req, res) => {
+  const {fromUser, toUser,fromUserName, toUserName, content} = req.body;
+
+  if(!content){
+    return  res.json({success: false})
+  }
+
+  try{
+    await prisma.message.create({
+      data: {
+        content,
+        fromUserId: fromUser,
+        toUserId: toUser,
+        fromUserName,
+        toUserName
+      }
+    })
+    return res.json({success: true})
+  }catch (err) {
+    console.log(err)
+    return res.json({success: false, msg: 'Internal server error'})
+  }
+})
+
+app.post('/get-messages', async (req, res) => {
+  const {fromUser, toUser} = req.body;
+
+  if (!fromUser || !toUser){
+    return res.json({success: false, msg: 'Please write some content'});
+  }
+
+  try {
+  const chatContent = await prisma.message.findMany({
+    where: {
+      fromUserId: fromUser,
+      toUserId: toUser
+    }
+  })
+  return res.json({success: true, chatContent});
+} catch (err) {
+  console.log(err)
+  return res.json({success: false});
+}
+})
 
 app.get('/get-chats', validateUser, async (req, res) => {
   try {

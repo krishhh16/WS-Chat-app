@@ -6,6 +6,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   userID   String   @id @default(uuid())
   username String
@@ -28,10 +29,13 @@ model UserDetails {
 model Message {
   id         String @id @default(uuid())
   content    String
-  fromUser   User   @relation("SentMessages", fields: [fromUserId], references: [userID])
+  fromUser      User   @relation("SentMessages", fields: [fromUserId], references: [userID])
   fromUserId String
-  toUser     User   @relation("ReceivedMessages", fields: [toUserId], references: [userID])
-  toUserId   String
+  toUser        User   @relation("ReceivedMessages", fields: [toUserId], references: [userID])
+  toUserId      String
+  fromUserName  String
+  toUserName    String
+  timestamp     DateTime @default(now())
 }
 
 model AddedFriends {

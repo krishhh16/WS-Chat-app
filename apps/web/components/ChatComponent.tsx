@@ -27,6 +27,21 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
       return;
     }
 
+    console.log(userData.data.userID + ":::::" + userId)
+    const userChats = await axios.post('http://localhost:3001/get-messages', {
+    fromUser: userData.data.userID,
+    toUser: userId
+    }, {withCredentials: true});
+    console.log(userChats.data.chatContent);
+
+    userChats?.data?.chatContent?.map(({content, fromUserName, toUserName}: {content: string, fromUserName: string, toUserName: string}) => {
+      if (fromUserName === selfData.myUsername){
+      setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: true }]);
+}     else {
+  setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: false }]);
+}
+    })
+
     setSelf({ myUsername: userData.data.username, myUserId: userData.data.userID });
 
     const newSocket = io('http://localhost:3001');
@@ -51,20 +66,29 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     return () => {
       newSocket.disconnect();
     };
-  }, [setContacts, setActiveUser]);
+  }, [setContacts, setActiveUser, username]);
 
   useEffect(() => {
     socketSetup();
-  }, [socketSetup]);
+  }, [username]);
 
   const handleSubmit = async () => {
     if (text.trim() === "") return;
 
-    setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
+    setMsgs(prevMsgs => { console.log(prevMsgs); return [...prevMsgs, { username: "Me", message: text, selfEnd: true }]});
+
+    
     const msgPayload = { fromUserId: selfData.myUserId, msg: text, fromUser: selfData.myUsername, toUserId: userId };
-    console.log(msgPayload)
+    
     setText('');
     socket?.emit('message', msgPayload);
+    await axios.post('http://localhost:3001/post-message', {
+      fromUser: selfData.myUserId,
+      toUser: userId,
+      content: text,
+      fromUserName: selfData.myUsername,
+      toUserName: username
+    }, {withCredentials: true});
   };
 
   return (

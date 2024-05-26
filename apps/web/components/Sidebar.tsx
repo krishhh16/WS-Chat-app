@@ -46,7 +46,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           Contacts
         </div>
         <h1 className="bg-gray-100 flex items-center justify-center">
-          {!contacts.length && "No contacts yet"}
+          {!contacts.length ? "No contacts yet": "Recently added"}
         </h1  >
         <div className="p-5 overflow-y-auto">
           {contacts?.map((item, i) => {
