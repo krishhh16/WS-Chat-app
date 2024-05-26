@@ -28,7 +28,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
       return
     }
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="fixed z-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
           <h2 className="text-2xl font-bold mb-4">Join A Group!</h2>
           <div>
@@ -53,7 +53,32 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
             <div key={i}
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{
-              setSidebarContacts([...contacts, {username: groupName, userId: createdBy, isRoom: true}])
+                setSidebarContacts((prevVal) =>{
+                  (async () => {
+                    try{
+                    const response = await axios.post("http://localhost:3001/add-chat", {
+                    username: groupName,
+                    userId: userData.myUserId,
+                    isRoom: true
+                  }, {withCredentials: true})
+                   if (!response.data.success){
+                    alert("Unable to Join the server")
+                    return
+                   } else{
+                    alert(`Successfully joined the server ${groupName}` )
+                    onClose(false)
+                   }} catch(err) {
+                    alert("Internal server issues")
+                    return
+                   }
+                  })()
+                  if (!prevVal.some((item) => item.username === groupName)){
+                  return [...prevVal, {username : groupName, userId: "", isRoom: true }]}
+                  else {
+                    alert(`Group ${groupName} is already in your list`)
+                    return [...prevVal]
+                  }
+                  })
               setActiveUser({username: groupName, userId: createdBy, isRoom: true})
               onClose(false);
       }
