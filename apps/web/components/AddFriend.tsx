@@ -75,14 +75,18 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                     alert("Unable to Join the server")
                     return
                    } else{
-                    alert(`Successfully created the server ${username}` )
-                    onClose(true)
+                    onClose(false)
                    }} catch(err) {
                     alert("Internal server issues")
                     return
                    }
                   })()
-                  return [...prevVal, {username, userId: userID, isRoom: true }]
+                  if (!prevVal?.some((item) => item.username === username)){
+                  return [...prevVal, {username, userId: userID, isRoom: true }]}
+                  else {
+                    alert('user already in your friend list')
+                   return [...prevVal]
+                  }
                   })
                   setActiveUser({username: username, userId: userID, isRoom: false})
                   console.log(contacts)
