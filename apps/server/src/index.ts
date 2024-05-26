@@ -226,6 +226,13 @@ app.post("/add-chat", validateUser,async (req, res) => {
     return res.json({success: false, msg: "please provide content to store the data"})
   }
   try{
+  const userDetail = await prisma.userDetails.findFirst({
+    where : {username, userId}
+  })
+
+  if (userDetail){
+    return res.json({success: false, msg: isRoom ? `You are already a part of ${username}`  : `You're already following the ${username}`})
+  }
   await prisma.userDetails.create({
     data: {
      isRoom,

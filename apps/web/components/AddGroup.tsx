@@ -7,6 +7,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
     const [users, setUsers] = useState([])
+    const [addSuccess, setAddSuccess] = useState(true)
 
     async function handleQuery(e : any) {
       setLoading(true)
@@ -54,6 +55,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
               className="w-full max-w-sm p-4 rounded-md shadow-md cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300"
               onClick={() =>{
                 setSidebarContacts((prevVal) =>{
+                  
                   (async () => {
                     try{
                     const response = await axios.post("http://localhost:3001/add-chat", {
@@ -62,20 +64,21 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                     isRoom: true
                   }, {withCredentials: true})
                    if (!response.data.success){
-                    alert("Unable to Join the server")
+                    alert(response.data.msg)
+                    setAddSuccess(false)
                     return
                    } else{
                     alert(`Successfully joined the server ${groupName}` )
                     onClose(false)
                    }} catch(err) {
                     alert("Internal server issues")
+                    setAddSuccess(false)
                     return
                    }
                   })()
-                  if (!prevVal.some((item) => item.username === groupName)){
-                  return [...prevVal, {username : groupName, userId: "", isRoom: true }]}
-                  else {
-                    alert(`Group ${groupName} is already in your list`)
+                  if ((addSuccess && !prevVal.some((item) => item.username === groupName))){
+                    return [...prevVal, {username : groupName, userId: "", isRoom: true }]
+                   }else {
                     return [...prevVal]
                   }
                   })
