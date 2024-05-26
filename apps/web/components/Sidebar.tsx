@@ -25,7 +25,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
         const chats = await axios.get('http://localhost:3001/get-chats', {withCredentials: true})
         if (!chats.data.success){
           alert('unable to fetch user data')
-        }else {
+        }else{
           console.log(chats.data);
           chats.data.chats.map(({username, userId, isRoom}: {username: string, userId: string, isRoom: boolean}) => {
             setContacts((prevData) =>{ 
@@ -35,15 +35,13 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
               return [...prevData]
             }
           })
-
           })
-
         }
       })()
     }, [])
 
     return (
-      <div className="w-1/3 sm:w-1/2 h-screen bg-white border-r shadow-lg">
+      <div className="w-1/3  h-screen bg-white border-r shadow-lg">
         <div className=" bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-lg font-bold">
           Contacts
         </div>

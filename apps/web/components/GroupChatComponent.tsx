@@ -26,7 +26,6 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
       alert('Please Login before sending messages');
       return;
     }
-
     setSelf({ myUsername: userData.data.username, myUserId: userData.data.userID });
 
     const newSocket = io('http://localhost:3001');
@@ -53,13 +52,14 @@ function GroupChatComponent({ username, userId, setActiveUser, setContacts }: an
   const handleSubmit = async () => {
     if (text.trim() === "") return;
     setMsgs(prevMsgs => [...prevMsgs, { username: "Me", message: text, selfEnd: true }]);
+    console.log(msgs)
     const msgPayload = { msg: text, fromUser: selfData.myUsername, groupName: username};
     setText('');
     socket?.emit('messageGroup', msgPayload);
     };
 
   return (
-    <div className="flex justify-center items-center min-w-full min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
       <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
         <div key="chat-interface" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-5 text-center text-2xl font-bold">
           {
