@@ -8,45 +8,49 @@ datasource db {
 }
 
 model User {
-  userID   String   @id @default(uuid())
-  username String
-  email    String
-  password String
-  sentMessages   Message[] @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
+  userID           String   @id @default(uuid())
+  username         String
+  email            String
+  password         String
   chatUsers UserDetails[]
 }
 
 model UserDetails {
-  id        String @id @default(uuid())
-  username  String
-  userId    String
-  isRoom    Boolean
-  followUserId String
+  id               String @id @default(uuid())
+  username         String
+  userId           String
+  isRoom           Boolean
+  followUserId     String
   userRel   User @relation(fields: [followUserId], references: [userID])
 }
 
 model Message {
-  id         String @id @default(uuid())
-  content    String
-  fromUser      User   @relation("SentMessages", fields: [fromUserId], references: [userID])
-  fromUserId String
-  toUser        User   @relation("ReceivedMessages", fields: [toUserId], references: [userID])
-  toUserId      String
-  fromUserName  String
-  toUserName    String
-  timestamp     DateTime @default(now())
+  id               String @id @default(uuid())
+  content          String
+  fromUserId       String
+  toUserId         String
+  fromUserName     String
+  toUserName       String
+  timestamp        DateTime @default(now())
 }
 
 model AddedFriends {
-  id         String @id @default(uuid())
-  userId     String
-  followId   String
+  id               String @id @default(uuid())
+  userId           String
+  followId         String
 }
 
 model Groups {
-  id        String  @id @default(uuid())
-  authorId  String
-  name      String @unique
-  bio       String
+  id              String  @id @default(uuid())
+  authorId         String
+  name             String @unique
+  bio              String
+}
+
+model Unread {
+  id       String @id @default(uuid())
+  username String
+  userId   String
+  message  String
+  toUser   String
 }

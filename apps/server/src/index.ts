@@ -283,8 +283,13 @@ app.post('/get-messages', async (req, res) => {
     where: {
       fromUserId: fromUser,
       toUserId: toUser
+    },
+    orderBy: {
+      timestamp: 'asc'
     }
   })
+  
+
   return res.json({success: true, chatContent});
 } catch (err) {
   console.log(err)
@@ -305,6 +310,19 @@ app.get('/get-chats', validateUser, async (req, res) => {
 }
 })
 
+app.get("/unread-messages", validateUser, async (req, res) => {
+  try {
+    const unread = await prisma.unread.findMany({
+      where: {toUser: req.userDetails?.userID}
+    })
+
+    
+
+    return res.json({success: true})
+  }catch (err) {
+    return res.json({success: false})
+  }
+})
 
 interface userObject {
   userId: string;
@@ -373,7 +391,17 @@ io.on("connection", (socket) => {
       io.to(socketId).emit('private_message', { msg, fromUser, fromUserId, toUserId });
       console.log(`Sent message to ${toUserId} the message ${msg} with the socket id ${socketId}`);
     } else {
-      console.log(`User ${toUserId} not found`);
+      await prisma.unread.create({
+        data: {
+          message: msg,
+          toUser: toUserId,
+          username: fromUser,
+          userId: fromUserId
+        }
+      });
+
+      console.log(`Unread message from ${fromUser} with content ${msg} to userId: ${toUserId}`)
+
     }
   });
 
