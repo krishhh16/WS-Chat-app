@@ -36,9 +36,9 @@ const NewGroup = ({ onClose, setSidebarContacts, setActiveUser, userData }: NewG
                 return
                }
               })()
-              return [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true }]
+              return [...prevVal, {username : formData.groupName, userId: res.data?.userId, isRoom: true, unread: false }]
               })
-            setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true})
+            setActiveUser({username : formData.groupName, userId: res.data?.userId, isRoom: true, unread: false})
             onClose(false);
         }
     }catch (err: any){

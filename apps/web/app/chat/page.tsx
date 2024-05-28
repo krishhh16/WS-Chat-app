@@ -13,8 +13,9 @@ export interface SelfData{
 }
 export interface userType {
   username: string;
-  userId: string
-  isRoom: boolean
+  userId: string,
+  isRoom: boolean,
+  unread: boolean
 }
 const GoingChat = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -27,6 +28,7 @@ const GoingChat = () => {
     username: "",
     userId: "",
     isRoom: false,
+    unread: false
   })
 
   useEffect(() => {

@@ -77,12 +77,12 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                    }
                   })()
                   if ((addSuccess && !prevVal.some((item) => item.username === groupName))){
-                    return [...prevVal, {username : groupName, userId: "", isRoom: true }]
+                    return [...prevVal, {username : groupName, userId: "", isRoom: true, unread: false }]
                    }else {
                     return [...prevVal]
                   }
                   })
-              setActiveUser({username: groupName, userId: createdBy, isRoom: true})
+              setActiveUser({username: groupName, userId: createdBy, isRoom: true, unread: false})
               onClose(false);
       }
       

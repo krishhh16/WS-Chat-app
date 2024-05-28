@@ -54,19 +54,31 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           {!contacts.length ? "No contacts yet": "Recently added"}
         </h1  >
         <div className="p-5 overflow-y-auto">
-          {contacts?.map((item: {username: string, userId: string, isRoom: boolean,}, i) => {
+          {contacts?.map((item: {username: string, userId: string, isRoom: boolean, unread: boolean}, i) => {
             return (
               <div
-              onClick={() => {console.log(item); setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom,  })}} 
-              key={i} 
+              onClick={() => {
+                console.log(item);
+                setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom, unread: false });
+                setContacts(prevContacts => {
+                  
+                  prevContacts[i].unread = false;
+                  return [...prevContacts]
+                })
+              }}
+              key={i}
               className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
             >
               <div className="flex items-center">
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold text-gray-800">{item.username}</h3>
+                  {item.unread && (
+                    <span className="text-sm text-red-500">Unread Message</span>
+                  )}
                 </div>
               </div>
             </div>
+        
             )
           }) 
        }

@@ -28,19 +28,19 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     }
 
     console.log(userData.data.userID + ":::::" + userId)
-    const userChats = await axios.post('http://localhost:3001/get-messages', {
-    fromUser: userData.data.userID,
-    toUser: userId
-    }, {withCredentials: true});
-    console.log(userChats.data.chatContent);
+//     const userChats = await axios.post('http://localhost:3001/get-messages', {
+//     fromUser: userData.data.userID,
+//     toUser: userId
+//     }, {withCredentials: true});
+//     console.log(userChats.data.chatContent);
 
-    userChats?.data?.chatContent?.map(({content, fromUserName, toUserName}: {content: string, fromUserName: string, toUserName: string}) => {
-      if (fromUserName === selfData.myUsername){
-      setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: true }]);
-}     else {
-  setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: false }]);
-}
-    })
+//     userChats?.data?.chatContent?.map(({content, fromUserName, toUserName}: {content: string, fromUserName: string, toUserName: string}) => {
+//       if (fromUserName === selfData.myUsername){
+//       setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: true }]);
+// }     else {
+//      setMsgs(prevMsgs => [...prevMsgs, { username: fromUserName, message: content, selfEnd: false }]);
+// }
+//     })
 
     setSelf({ myUsername: userData.data.username, myUserId: userData.data.userID });
 
@@ -58,7 +58,13 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
         if (!prevContacts.some(contact => contact.userId === fromUserId)) {
           return [...prevContacts, { username: fromUser, userId: fromUserId, unread: true, msg }];
         } else {
-        return [...prevContacts];
+        prevContacts.map((item) => {
+          if (item.username === fromUser){
+            item.unread = true;
+          }
+        })
+
+       return [...prevContacts]
       }
       });
       setActiveUser({ username: fromUser, userId: fromUserId });
@@ -83,13 +89,13 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     
     setText('');
     socket?.emit('message', msgPayload);
-    await axios.post('http://localhost:3001/post-message', {
-      fromUser: selfData.myUserId,
-      toUser: userId,
-      content: text,
-      fromUserName: selfData.myUsername,
-      toUserName: username
-    }, {withCredentials: true});
+    // await axios.post('http://localhost:3001/post-message', {
+    //   fromUser: selfData.myUserId,
+    //   toUser: userId,
+    //   content: text,
+    //   fromUserName: selfData.myUsername,
+    //   toUserName: username
+    // }, {withCredentials: true});
   };
 
   return (

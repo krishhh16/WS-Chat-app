@@ -86,13 +86,13 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                    }
                   })()
                   if (!prevVal?.some((item) => item.username === username)){
-                  return [...prevVal, {username, userId: userID, isRoom: false, unread: false }]}
+                  return [...prevVal, {username, userId: userID, isRoom: false, unread: true }]}
                   else {
                     alert('user already in your friend list')
                    return [...prevVal]
                   }
                   })
-                  setActiveUser({username: username, userId: userID, isRoom: false})
+                  setActiveUser({username: username, userId: userID, isRoom: false, unread: false})
                   console.log(contacts)
                   setIsClicked(!isClicked)
                   onClose(false);
