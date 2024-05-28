@@ -315,10 +315,8 @@ app.get("/unread-messages", validateUser, async (req, res) => {
     const unread = await prisma.unread.findMany({
       where: {toUser: req.userDetails?.userID}
     })
-
-
     
-    return res.json({success: true})
+    return res.json({success: true, unread})
   }catch (err) {
     return res.json({success: false})
   }

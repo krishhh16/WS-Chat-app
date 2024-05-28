@@ -31,7 +31,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
         if (!chats.data.success){
           alert('unable to fetch user data')
         }else{
-          console.log(chats.data);
+          console.log("chat success", chats.data);
           chats.data.chats.map(({username, followUserId, isRoom}: {username: string, followUserId: string, isRoom: boolean}) => {
             setContacts((prevData) =>{ 
             if (!prevData?.some(contact => contact.username === username)){
@@ -41,7 +41,24 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
             }
           })
           })
+          const unread = await axios.get("http://localhost:3001/unread-messages", {withCredentials: true})
+
+          console.log("unread response", unread.data)
+
+          unread?.data?.unread?.map((item: any) => {
+            setContacts((items, i) => {
+
+              if ((items.some((x: any) => x.username === item.username))){
+                //@ts-ignore
+                items[items.findIndex(x => x.username === item.username)].unread = true;
+                return [...items]
+              }else {
+                return [...items]
+              }              
+            })  
+          })
         }
+     
       })()
     }, [])
 
@@ -61,7 +78,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                 console.log(item);
                 setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom, unread: false });
                 setContacts(prevContacts => {
-                  
+                  //@ts-ignore
                   prevContacts[i].unread = false;
                   return [...prevContacts]
                 })
