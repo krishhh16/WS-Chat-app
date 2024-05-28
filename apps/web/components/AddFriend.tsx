@@ -2,13 +2,17 @@ import axios from "axios";
 import React, { useState } from "react";
 import { userType } from "../app/chat/page";
 import { SelfData } from "../app/chat/page";
+import { SidebarProps } from "./Sidebar";
+
 export interface AddFriendProps {
   contacts: userType[],
   onClose: React.Dispatch<React.SetStateAction<boolean>>,
-  setSidebarContacts: React.Dispatch<React.SetStateAction<userType[]>>
+  setSidebarContacts: React.Dispatch<React.SetStateAction<SidebarProps[]>>
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>,
   userData: SelfData,
 }
+
+
 const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }: AddFriendProps) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
@@ -82,7 +86,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
                    }
                   })()
                   if (!prevVal?.some((item) => item.username === username)){
-                  return [...prevVal, {username, userId: userID, isRoom: false }]}
+                  return [...prevVal, {username, userId: userID, isRoom: false, unread: false }]}
                   else {
                     alert('user already in your friend list')
                    return [...prevVal]

@@ -8,9 +8,14 @@ import NewGroup from './NewGroup';
 import { userType } from '../app/chat/page';
 import axios from 'axios';
 
+export interface SidebarProps extends userType {
+  unread: boolean;
+  msg ?: string;
+}
+
 interface SidebarPropType {
   setActiveUser: React.Dispatch<React.SetStateAction<userType>>;
-  setContacts: React.Dispatch<React.SetStateAction<userType[]>>;
+  setContacts: React.Dispatch<React.SetStateAction<SidebarProps[]>>;
   contacts: userType[];
   userData: {myUsername: string,myUserId: string}
 }
@@ -30,7 +35,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           chats.data.chats.map(({username, followUserId, isRoom}: {username: string, followUserId: string, isRoom: boolean}) => {
             setContacts((prevData) =>{ 
             if (!prevData?.some(contact => contact.username === username)){
-              return [...prevData, {username, userId: followUserId, isRoom}]
+              return [...prevData, {username, userId: followUserId, isRoom, unread: false}]
             } else {
               return [...prevData]
             }
@@ -49,10 +54,10 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           {!contacts.length ? "No contacts yet": "Recently added"}
         </h1  >
         <div className="p-5 overflow-y-auto">
-          {contacts?.map((item, i) => {
+          {contacts?.map((item: {username: string, userId: string, isRoom: boolean,}, i) => {
             return (
               <div
-              onClick={() => {console.log(item); setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom })}} 
+              onClick={() => {console.log(item); setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom,  })}} 
               key={i} 
               className="p-4 mb-7 bg-white shadow-md rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer space-y-3"
             >

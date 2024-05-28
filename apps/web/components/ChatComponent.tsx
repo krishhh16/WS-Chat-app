@@ -54,11 +54,12 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     newSocket.on("private_message", ({ msg, fromUser, fromUserId, toUserId }: { toUserId: string, msg: string; fromUser: string, fromUserId: string }) => {
       console.log(`You've received a message ${msg} from User ${fromUser}`);
       setMsgs(prevMsgs => [...prevMsgs, { username: fromUser, message: msg, selfEnd: false }]);
-      setContacts((prevContacts: { username: string; userId: string; }[]) => {
+      setContacts((prevContacts: { username: string; userId: string; unread: boolean, msg?: string }[]) => {
         if (!prevContacts.some(contact => contact.userId === fromUserId)) {
-          return [...prevContacts, { username: fromUser, userId: fromUserId }];
-        }
-        return prevContacts;
+          return [...prevContacts, { username: fromUser, userId: fromUserId, unread: true, msg }];
+        } else {
+        return [...prevContacts];
+      }
       });
       setActiveUser({ username: fromUser, userId: fromUserId });
     });

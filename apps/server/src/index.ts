@@ -316,8 +316,8 @@ app.get("/unread-messages", validateUser, async (req, res) => {
       where: {toUser: req.userDetails?.userID}
     })
 
-    
 
+    
     return res.json({success: true})
   }catch (err) {
     return res.json({success: false})
@@ -401,7 +401,6 @@ io.on("connection", (socket) => {
       });
 
       console.log(`Unread message from ${fromUser} with content ${msg} to userId: ${toUserId}`)
-
     }
   });
 
