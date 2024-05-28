@@ -53,7 +53,7 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
                 items[items.findIndex(x => x.username === item.username)].unread = true;
                 return [...items]
               }else {
-                return [...items]
+                return [...items, {username: item.username, userId: item.userId}]
               }              
             })  
           })
