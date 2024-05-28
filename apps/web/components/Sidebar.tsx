@@ -46,8 +46,8 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           console.log("unread response", unread.data)
 
           unread?.data?.unread?.map((item: any) => {
+            //@ts-ignore
             setContacts((items, i) => {
-
               if ((items.some((x: any) => x.username === item.username))){
                 //@ts-ignore
                 items[items.findIndex(x => x.username === item.username)].unread = true;

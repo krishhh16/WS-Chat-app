@@ -322,6 +322,30 @@ app.get("/unread-messages", validateUser, async (req, res) => {
   }
 })
 
+app.delete("/remove-unread", validateUser, async (req, res)=> {
+  const {username} :{username: string} = req.body;
+
+  try {
+    const userUnread = await prisma.unread.findMany({
+      where: {
+        username,
+        toUser: req.userDetails?.userID
+      }
+    })
+
+    userUnread.map(async (item) => {
+      await prisma.unread.delete({
+        where: {
+          id: item.id
+        }
+      })
+    })
+  }catch (err) {
+    console.log(err);
+    return res.json({success: false})
+  }
+})
+
 interface userObject {
   userId: string;
   socketId: string;
