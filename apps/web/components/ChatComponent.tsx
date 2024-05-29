@@ -102,14 +102,35 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
       <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
         <div key="chat-interface" className=" bg-gradient-to-r from-blue-500 to-indigo-500 flex text-white justify-between  p-5 text-center text-xl font-bold">
-          <h1 className='w-2/3'>{username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}</h1>
+          <h1 className='w-2/3 items-center justify-self-start flex'>{username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}</h1>
+          { username &&
+          <div className="flex w-1/3 justify-around">
+          
           <button onClick={async () => {
-            await axios.delete("http/localhost:3001/remove-recents", {
+            const response = await axios.delete("http/localhost:3001/remove-recents", {
               data: {
                 username
               }
             })
-          }}><i className="ri-door-open-line"></i></button>
+
+            if (!response.data.success) alert("Couldn't remove user")
+            else {
+              setActiveUser({username: "", userId: ""})
+              setContacts((prevData: any) => {
+                
+              })
+            }
+          }}
+          className='block'
+          ><i className="ri-door-open-line text-3xl"></i>
+          <h5 className="font-normal text-sm">Leave chat</h5>
+          </button>
+          <button>
+          <i className="ri-video-chat-line text-3xl"></i>
+          <h5 className="font-normal text-sm">Video call</h5>
+          </button>
+          </div>
+          }
         </div>
         <div className="flex-grow p-5 overflow-y-auto bg-gray-50">
           {msgs.map((item, i) => (

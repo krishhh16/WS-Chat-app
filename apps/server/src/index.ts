@@ -91,6 +91,7 @@ app.post('/signup', async (req, res) => {
 
 app.post('/signin', async (req, res) => {
   const { email, password } = await req.body;
+  console.log(email, password)
   if (!email || !password) {
     return res.status(404).json({ success: false });
   }
@@ -98,18 +99,18 @@ app.post('/signin', async (req, res) => {
   const userExists = await prisma.user.findFirst({
     where: { email, password }
   });
-
+  console.log(userExists)
   if (!userExists) {
     return res.json({ success: false });
   }
-
+  console.log('user found')
   try {
     const token = jwt.sign({ email }, jwtSec);
     res.cookie("token", token);
 
     return res.json({ success: true });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    console.log(err.message);
     return res.json({ success: false });
   }
 });
