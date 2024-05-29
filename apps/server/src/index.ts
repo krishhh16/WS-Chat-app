@@ -20,7 +20,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:3000',
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE"],
     credentials: true
   }
 });
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: 'http://localhost:3000',
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE"],
     credentials: true
   })
 );
@@ -323,9 +323,11 @@ app.get("/unread-messages", validateUser, async (req, res) => {
 })
 
 app.delete("/remove-unread", validateUser, async (req, res)=> {
+  console.log('started executing')
   const {username} :{username: string} = req.body;
 
   try {
+    console.log('try body start')
     const userUnread = await prisma.unread.findMany({
       where: {
         username,
@@ -333,18 +335,37 @@ app.delete("/remove-unread", validateUser, async (req, res)=> {
       }
     })
 
-    userUnread.map(async (item) => {
-      await prisma.unread.delete({
+      await prisma.unread.deleteMany({
         where: {
-          id: item.id
+          username,
+          toUser: req.userDetails?.userID
         }
       })
-    })
+      return res.json({success: true})
   }catch (err) {
     console.log(err);
-    return res.json({success: false})
+    return res.json({success: false});
   }
 })
+
+app.delete("/remove-recents", validateUser, async(req, res) => {
+    const {username} = req.body;
+
+    try {
+      await prisma.userDetails.deleteMany({
+        where: {
+          username,
+          id: req.userDetails?.userID
+        }
+      })
+
+      return res.json({success: true})
+    }catch (err) {
+      console.log(err)
+      return res.json({success: false})
+    }
+})
+
 
 interface userObject {
   userId: string;

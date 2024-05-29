@@ -7,6 +7,7 @@ import AddGroup from './AddGroup';
 import NewGroup from './NewGroup';
 import { userType } from '../app/chat/page';
 import axios from 'axios';
+import { UNSTABLE_REVALIDATE_RENAME_ERROR } from 'next/dist/lib/constants';
 
 export interface SidebarProps extends userType {
   unread: boolean;
@@ -74,8 +75,14 @@ const Sidebar = ({setActiveUser, setContacts, contacts, userData}: SidebarPropTy
           {contacts?.map((item: {username: string, userId: string, isRoom: boolean, unread: boolean}, i) => {
             return (
               <div
-              onClick={() => {
-                console.log(item);
+              onClick={async() => {
+               await axios.delete('http://localhost:3001/remove-unread', {
+                  data: {
+                    username: item.username
+                  },
+                  withCredentials: true
+                })
+
                 setActiveUser({ username: item.username, userId: item.userId, isRoom: item.isRoom, unread: false });
                 setContacts(prevContacts => {
                   //@ts-ignore
