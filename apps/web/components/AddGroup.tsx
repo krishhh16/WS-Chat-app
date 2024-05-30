@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { AddFriendProps as AddGroupProps } from "./AddFriend";
 
-const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }: AddGroupProps) => {
+const AddFriend = ({ onClose, setSidebarContacts, setActiveUser, userData }: AddGroupProps) => {
     const [username, setUserName] = useState("")
     const [result, setResultText] = useState("")
     const [isLoading, setLoading] = useState(false)
@@ -20,9 +20,9 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
       if (!users.data.success){
         setResultText('Internal Server error')
       } else if (users.data.users?.length === 0 || users.data.users.some((item: any) => item.username ===userData.myUsername)){
-        setResultText('Hmmmm.... No such user')
+        setResultText('Hmmmm.... No such user');
       } else {
-        setResultText("Users:")
+        setResultText("Users:") 
         setUsers(users.data.groups)
       }
       setLoading(false)

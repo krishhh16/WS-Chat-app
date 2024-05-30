@@ -12,7 +12,6 @@ export interface AddFriendProps {
   userData: SelfData,
 }
 
-
 const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userData }: AddFriendProps) => {
     const [username, setUserName] = useState("")
     const [isClicked, setIsClicked] = useState(false);
