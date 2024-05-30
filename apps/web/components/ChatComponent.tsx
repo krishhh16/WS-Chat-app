@@ -107,20 +107,21 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
           <div className="flex w-1/3 justify-around">
           
           <button onClick={async () => {
-            // const response = await axios.delete("http/localhost:3001/remove-recents", {
-            //   data: {
-            //     username
-            //   }
-            // })
+            const response = await axios.delete("http://localhost:3001/remove-recents", {
+              data: {
+                username
+              },
+              withCredentials: true
+            })
 
-            // if (!response.data.success) alert("Couldn't remove user")
-            // else {
+            if (!response.data.success) alert("Couldn't remove user")
+            else {
           setContacts((prevData: any) => {
             const returnData = prevData.filter((data: any) => data.username !== username)
             return [...returnData]
           })
           setActiveUser({username: "", userId: ""})
-        // }
+          }
           }}
           className='block'
           ><i className="ri-door-open-line text-3xl"></i>

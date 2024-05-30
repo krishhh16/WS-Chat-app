@@ -351,12 +351,12 @@ app.delete("/remove-unread", validateUser, async (req, res)=> {
 
 app.delete("/remove-recents", validateUser, async(req, res) => {
     const {username} = req.body;
-
+    console.log(`username ${username} is being deleted from user ${req.userDetails?.username} with user Id ${req.userDetails?.userID}`)
     try {
       await prisma.userDetails.deleteMany({
         where: {
           username,
-          id: req.userDetails?.userID
+          userId: req.userDetails?.userID
         }
       })
 
