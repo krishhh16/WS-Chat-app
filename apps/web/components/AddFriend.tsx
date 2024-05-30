@@ -30,7 +30,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
 
       if (!users.data.success){
         setResultText('Internal Server error')
-      } else if (users.data.users?.length === 0){
+      } else if (users.data.users?.length === 0 || users.data.users.some((item: any) => item.username ===userData.myUsername )){
         setResultText('Hmmmm.... No such user')
       } else {
         setResultText("Users:")
@@ -56,7 +56,6 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
      result && (
         <>
         <p className="text-gray-700 font-semibold">{result}</p>
-        <p className="text-gray-700 font-semibold">{users?.length} Users Found!</p>
         { 
         users.map(({username, userID}: {username: string, userID: string}, i: number) => {
           if (userData.myUsername === username) {

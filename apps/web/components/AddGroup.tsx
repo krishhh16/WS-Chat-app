@@ -19,7 +19,7 @@ const AddFriend = ({ contacts, onClose, setSidebarContacts, setActiveUser, userD
 
       if (!users.data.success){
         setResultText('Internal Server error')
-      } else if (users.data.users?.length === 0){
+      } else if (users.data.users?.length === 0 || users.data.users.some((item: any) => item.username ===userData.myUsername)){
         setResultText('Hmmmm.... No such user')
       } else {
         setResultText("Users:")
