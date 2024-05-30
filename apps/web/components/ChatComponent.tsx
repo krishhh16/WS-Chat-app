@@ -102,24 +102,25 @@ function ChatComponent({ username, userId, setActiveUser, setContacts }: any) {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 w-2/3">
       <div className="w-full max-w-2xl h-screen border rounded-3xl overflow-hidden shadow-2xl bg-white flex flex-col">
         <div key="chat-interface" className=" bg-gradient-to-r from-blue-500 to-indigo-500 flex text-white justify-between  p-5 text-center text-xl font-bold">
-          <h1 className='w-2/3 items-center justify-self-start flex'>{username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}</h1>
+          <h1 className='w-2/3 items-center justify-center flex'>{username ? `Start chatting with ${username} as ${selfData.myUsername}` : "Chat with your friends!!!"}</h1>
           { username &&
           <div className="flex w-1/3 justify-around">
           
           <button onClick={async () => {
-            const response = await axios.delete("http/localhost:3001/remove-recents", {
-              data: {
-                username
-              }
-            })
+            // const response = await axios.delete("http/localhost:3001/remove-recents", {
+            //   data: {
+            //     username
+            //   }
+            // })
 
-            if (!response.data.success) alert("Couldn't remove user")
-            else {
-              setActiveUser({username: "", userId: ""})
-              setContacts((prevData: any) => {
-                
-              })
-            }
+            // if (!response.data.success) alert("Couldn't remove user")
+            // else {
+          setContacts((prevData: any) => {
+            const returnData = prevData.filter((data: any) => data.username !== username)
+            return [...returnData]
+          })
+          setActiveUser({username: "", userId: ""})
+        // }
           }}
           className='block'
           ><i className="ri-door-open-line text-3xl"></i>
